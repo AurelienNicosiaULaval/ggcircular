@@ -1,0 +1,136 @@
+url: https://aureliennicosiaulaval.github.io/ggcircular/
+template:
+  bootstrap: 5
+
+reference:
+- title: Rose diagrams
+  contents:
+  - geom_rose
+  - stat_rose
+
+- title: Circular density
+  contents:
+  - geom_circular_density
+  - stat_circular_density
+
+- title: Mean directions and summaries
+  contents:
+  - geom_mean_direction
+  - stat_mean_direction
+  - circular_summary
+  - mean_direction
+  - resultant_length
+  - mean_resultant_length
+  - circular_variance
+  - circular_sd
+  - estimate_kappa
+
+- title: Circular intervals
+  contents:
+  - geom_confidence_arc
+  - geom_circular_interval
+
+- title: Circular distributions
+  contents:
+  - stat_vonmises
+  - stat_vonmises_fit
+  - fit_vonmises_mixture
+  - stat_vonmises_mixture
+  - stat_wrapped_normal
+  - stat_uniform_circular
+
+- title: Circular tests and intervals
+  contents:
+  - circular_mean_ci
+  - rayleigh_test
+  - watson_williams_test
+  - stat_circular_test
+
+- title: Scales and coordinates
+  contents:
+  - coord_circular
+  - scale_x_circular_radians
+  - scale_x_circular_degrees
+  - scale_x_circular_hours
+  - scale_x_circular_compass
+
+- title: Angle utilities
+  contents:
+  - normalize_angle
+  - angular_difference
+  - angular_distance
+  - deg_to_rad
+  - rad_to_deg
+  - hour_to_rad
+  - rad_to_hour
+  - compass_to_rad
+  - rad_to_compass
+  - is_angle
+  - check_angle
+
+- title: Themes
+  contents:
+  - theme_circular
+  - theme_rose
+  - theme_compass
+
+- title: Directional movement
+  contents:
+  - geom_direction_arrow
+  - geom_circular_point
+  - geom_circular_rug
+  - mutate_directional_features
+  - compute_step_length
+  - compute_bearing
+  - compute_turn_angle
+  - as_step_data
+  - augment_momentuHMM_angles
+  - plot_state_angles
+
+- title: Angular model diagnostics
+  contents:
+  - circular_residuals
+  - circular_model_diagnostics
+  - augment_circular
+  - tidy_circular
+  - glance_circular
+
+- title: Spherical and posterior helpers
+  contents:
+  - spherical_to_cartesian
+  - cartesian_to_spherical
+  - spherical_summary
+  - as_circular_draws
+  - summarise_circular_draws
+  - autoplot_circular_draws
+
+- title: Autoplot
+  contents:
+  - autoplot_circular
+
+- title: Datasets
+  contents:
+  - wind_directions
+  - animal_steps
+  - hourly_activity
+  - axial_orientations
+
+articles:
+- title: Getting started
+  contents:
+  - ggcircular
+
+- title: Core graphics
+  contents:
+  - rose-diagrams
+  - circular-density
+  - mean-direction-and-uncertainty
+  - axial-data
+
+- title: Applications
+  contents:
+  - movement-data
+  - circular-distributions
+  - model-diagnostics
+  - spherical-and-posterior
+  - article-demonstration

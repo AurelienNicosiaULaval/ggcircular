@@ -1,0 +1,118 @@
+---
+title: "Visualizing Circular and Directional Data with ggcircular"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Visualizing Circular and Directional Data with ggcircular}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5)
+```
+
+# Abstract
+
+This demonstration presents a reproducible workflow for simulated animal
+movement data. The aim is to show how rose diagrams, circular density estimates
+and mean directions can be combined in a `ggplot2` grammar.
+
+# Introduction
+
+Directional variables occur in wind, movement, orientation and time-of-day
+data. Their periodic nature requires summaries and graphics that respect the
+circle.
+
+# Circular data and specialized graphics
+
+Circular graphics should keep the endpoints of the angular scale adjacent.
+They should also distinguish directionality, concentration and uncertainty.
+
+# The grammar of ggcircular
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggcircular)
+```
+
+# Simulated trajectories
+
+```{r}
+ggplot(animal_steps, aes(x = x, y = y, group = id, colour = id)) +
+  geom_path(alpha = 0.7) +
+  coord_equal() +
+  theme_minimal()
+```
+
+# Directional features
+
+```{r}
+movement_summary <- animal_steps |>
+  group_by(state) |>
+  summarise(
+    mean_step = mean(step_length, na.rm = TRUE),
+    median_step = median(step_length, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+movement_summary
+```
+
+# Bearings by state
+
+```{r}
+ggplot(animal_steps, aes(x = bearing, fill = state)) +
+  geom_rose(bins = 24, alpha = 0.7) +
+  facet_wrap(~ state) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Turn angles by state
+
+```{r}
+ggplot(animal_steps, aes(x = turn_angle, fill = state)) +
+  geom_rose(bins = 24, alpha = 0.7) +
+  geom_mean_direction() +
+  facet_wrap(~ state) +
+  scale_x_circular_radians() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Mean directions and resultant length
+
+```{r}
+animal_steps |>
+  group_by(state) |>
+  circular_summary(turn_angle)
+```
+
+# Circular densities
+
+```{r}
+ggplot(animal_steps, aes(x = turn_angle, colour = state)) +
+  geom_circular_density(linewidth = 1) +
+  scale_x_circular_radians() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Interpretation
+
+In the simulated data, directed movement has longer steps and more concentrated
+turn angles. Encamped movement has shorter steps and more diffuse turning.
+Exploratory movement is intermediate. These statements describe the simulated
+dataset and should not be generalized beyond it.
+
+# Discussion
+
+The example shows how the same grammar can summarize raw angular observations,
+derived movement quantities and grouped comparisons.
+
+# Reproducibility
+
+All data used here are included in the package as simulated datasets. The code
+chunks can be evaluated after installing `ggcircular`.

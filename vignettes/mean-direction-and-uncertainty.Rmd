@@ -1,0 +1,78 @@
+---
+title: "Mean direction and uncertainty"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mean direction and uncertainty}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5)
+```
+
+# Circular mean
+
+The circular mean is computed from the mean cosine and sine components. This
+avoids the boundary problem that affects arithmetic means.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggcircular)
+
+circular_summary(wind_directions, direction)
+```
+
+# Why arithmetic means fail
+
+Angles close to `0` and `2 * pi` are close on the circle but far on the real
+line. Component-based averages respect the circle.
+
+# Resultant length
+
+The mean resultant length `Rbar` is between zero and one. Values near one
+indicate concentration near a common direction; values near zero indicate weak
+or cancelling directionality.
+
+# Mean by group
+
+```{r}
+wind_directions |>
+  group_by(season) |>
+  circular_summary(direction)
+```
+
+# Displaying the mean
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(bins = 24) +
+  geom_mean_direction(length = "resultant") +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Arcs of uncertainty
+
+`stat_mean_direction()` computes approximate confidence limits when
+`conf.int = TRUE`. `geom_confidence_arc()` can display any angular interval
+stored as lower and upper endpoints.
+
+```{r}
+summaries <- wind_directions |>
+  group_by(season) |>
+  circular_summary(direction)
+
+ggplot(summaries, aes(x = mean, y = Rbar)) +
+  geom_point() +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Uniform or nearly uniform cases
+
+When `Rbar` is close to zero, the mean direction is unstable and should be
+interpreted cautiously.

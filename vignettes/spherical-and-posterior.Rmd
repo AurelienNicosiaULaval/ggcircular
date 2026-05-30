@@ -1,0 +1,65 @@
+---
+title: "Spherical directions and circular posterior draws"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Spherical directions and circular posterior draws}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5)
+```
+
+# Spherical helpers
+
+The spherical helpers convert between azimuth-colatitude coordinates and
+Cartesian unit vectors. They are intentionally lightweight and are designed for
+preprocessing or summary steps.
+
+```{r}
+library(ggplot2)
+library(ggcircular)
+
+coords <- spherical_to_cartesian(
+  theta = c(0, pi / 2, pi),
+  phi = c(pi / 2, pi / 2, pi / 3)
+)
+
+coords
+cartesian_to_spherical(coords$x, coords$y, coords$z)
+spherical_summary(c(0, pi / 2, pi), c(pi / 2, pi / 2, pi / 3))
+```
+
+# Circular posterior draws
+
+Posterior draws can be converted to a long circular format when the optional
+`posterior` package is installed.
+
+```{r}
+if (requireNamespace("posterior", quietly = TRUE)) {
+  set.seed(1)
+  draws <- posterior::draws_df(
+    theta = rnorm(400, mean = pi / 3, sd = 0.25),
+    phi = rnorm(400, mean = pi, sd = 0.35)
+  )
+
+  circular_draws <- as_circular_draws(draws, variables = c("theta", "phi"))
+  summarise_circular_draws(circular_draws)
+}
+```
+
+```{r}
+if (requireNamespace("posterior", quietly = TRUE)) {
+  autoplot_circular_draws(circular_draws)
+}
+```
+
+# State-based angle plots
+
+The same plotting grammar applies when angles are grouped by observed or latent
+states.
+
+```{r}
+plot_state_angles(animal_steps, angle = turn_angle, state = state, type = "rose")
+```

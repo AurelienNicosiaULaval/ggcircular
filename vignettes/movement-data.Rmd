@@ -1,0 +1,82 @@
+---
+title: "Movement data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Movement data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5)
+```
+
+# Tracks and directions
+
+Trajectories produce step lengths, bearings and turn angles. These quantities
+are natural inputs for circular graphics.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggcircular)
+```
+
+# Coordinates, steps, bearings and turns
+
+```{r}
+raw_tracks <- animal_steps |>
+  select(id, time, x, y)
+
+steps <- raw_tracks |>
+  mutate_directional_features(x = x, y = y, id = id, time = time)
+```
+
+# Visualize a trajectory
+
+```{r}
+ggplot(animal_steps, aes(x = x, y = y, group = id)) +
+  geom_path(alpha = 0.5) +
+  geom_direction_arrow(aes(angle = bearing, length = step_length), alpha = 0.35) +
+  coord_equal() +
+  theme_minimal()
+```
+
+# Bearings by state
+
+```{r}
+ggplot(animal_steps, aes(x = bearing, fill = state)) +
+  geom_rose(bins = 24) +
+  facet_wrap(~ state) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Turn angles by state
+
+```{r}
+ggplot(animal_steps, aes(x = turn_angle, fill = state)) +
+  geom_rose(bins = 24) +
+  geom_mean_direction() +
+  facet_wrap(~ state) +
+  scale_x_circular_radians() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Comparison by state
+
+```{r}
+ggplot(animal_steps, aes(x = turn_angle, colour = state)) +
+  geom_circular_density(linewidth = 1) +
+  scale_x_circular_radians() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Links with HMM and SSF workflows
+
+The same summaries can be applied to observed states, hidden states or
+step-selection covariates. The package intentionally keeps model dependencies
+out of the core package so these workflows remain flexible.

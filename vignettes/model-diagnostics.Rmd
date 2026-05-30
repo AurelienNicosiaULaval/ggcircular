@@ -1,0 +1,89 @@
+---
+title: "Angular model diagnostics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Angular model diagnostics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5)
+```
+
+# Optional model integration
+
+`ggcircular` keeps angular model packages optional. When `CircularRegression`
+is installed, model objects can be tidied, augmented and visualized with
+diagnostic plots.
+
+```{r}
+library(ggplot2)
+library(ggcircular)
+```
+
+```{r}
+if (requireNamespace("CircularRegression", quietly = TRUE)) {
+  fit <- CircularRegression::consensus(direction ~ speed, data = wind_directions)
+
+  tidy_circular(fit)
+  glance_circular(fit)
+}
+```
+
+# Circular residuals
+
+```{r}
+if (requireNamespace("CircularRegression", quietly = TRUE)) {
+  fit <- CircularRegression::consensus(direction ~ speed, data = wind_directions)
+  residuals <- circular_residuals(fit)
+
+  head(residuals)
+  circular_model_diagnostics(fit)
+}
+```
+
+# Residual graphics
+
+```{r}
+if (requireNamespace("CircularRegression", quietly = TRUE)) {
+  fit <- CircularRegression::consensus(direction ~ speed, data = wind_directions)
+
+  autoplot(fit, type = "residuals_rose")
+  autoplot(fit, type = "residuals_density")
+}
+```
+
+# Mixtures of von Mises distributions
+
+```{r}
+fit_mix <- fit_vonmises_mixture(wind_directions$direction, k = 2)
+
+tidy_circular(fit_mix)
+glance_circular(fit_mix)
+```
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(aes(y = after_stat(density)), bins = 24, alpha = 0.4) +
+  stat_vonmises_mixture(fit = fit_mix, linewidth = 1) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Tests and intervals
+
+```{r}
+circular_mean_ci(wind_directions$direction, method = "large_sample")
+rayleigh_test(wind_directions$direction)
+```
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(bins = 16) +
+  stat_circular_test(test = "rayleigh") +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```

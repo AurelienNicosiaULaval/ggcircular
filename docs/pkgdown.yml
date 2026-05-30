@@ -1,0 +1,18 @@
+pandoc: '3.9'
+pkgdown: 2.1.2
+pkgdown_sha: ~
+articles:
+  article-demonstration: article-demonstration.html
+  axial-data: axial-data.html
+  circular-density: circular-density.html
+  circular-distributions: circular-distributions.html
+  ggcircular: ggcircular.html
+  mean-direction-and-uncertainty: mean-direction-and-uncertainty.html
+  model-diagnostics: model-diagnostics.html
+  movement-data: movement-data.html
+  rose-diagrams: rose-diagrams.html
+  spherical-and-posterior: spherical-and-posterior.html
+last_built: 2026-05-30T22:09Z
+urls:
+  reference: https://aureliennicosiaulaval.github.io/ggcircular/reference
+  article: https://aureliennicosiaulaval.github.io/ggcircular/articles

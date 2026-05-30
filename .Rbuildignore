@@ -1,0 +1,6 @@
+^_pkgdown\.yml$
+^README\.Rmd$
+^TODO\.md$
+^docs$
+^Rplots\.pdf$
+^\.Rbuildignore$
