@@ -24,7 +24,6 @@ Imports:
     utils,
     vctrs
 Suggests:
-    CircularRegression,
     circular,
     knitr,
     momentuHMM,

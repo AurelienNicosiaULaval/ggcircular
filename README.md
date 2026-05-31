@@ -267,7 +267,8 @@ autoplot(fit, type = "fitted_observed")
 
 Optional helpers currently target:
 
-- `CircularRegression` angular, consensus and two-step objects.
+- `CircularRegression`-style angular, consensus and two-step objects
+  through S3 class support.
 - `momentuHMM` state probabilities and Viterbi states.
 - `posterior` draw objects through `posterior::as_draws_df()`.
 - `circular` tests when classical circular test implementations are
@@ -301,6 +302,22 @@ does not replace specialist inference workflows for circular statistics.
 - Multimodal data should usually be inspected with density or mixture
   graphics, not summarized only by one mean direction.
 
+## CRAN Readiness
+
+The package is being prepared for a first CRAN submission. The release
+checklist currently includes:
+
+- `R CMD check --as-cran` on the final source tarball;
+- `--run-donttest` checks;
+- hard-dependency checks with `_R_CHECK_FORCE_SUGGESTS_=false`;
+- full-suggests checks when optional packages are available;
+- Linux R-devel, Linux R-release, macOS R-release and Windows R-release
+  checks;
+- vignette build timing and source tarball size checks.
+
+Longer articles are built for pkgdown and excluded from the CRAN
+tarball.
+
 ## Vignettes
 
 Start with:
@@ -333,6 +350,14 @@ Then see the pkgdown articles:
   notes](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation.html)
 - [Comparative
   validation](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation-comparative.html)
+
+## Contributing and Support
+
+Contributions are welcome through focused GitHub issues and pull
+requests. See [`CONTRIBUTING.md`](CONTRIBUTING.md),
+[`SUPPORT.md`](SUPPORT.md) and
+[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for contribution, support and
+conduct guidelines.
 
 ## Development Status
 

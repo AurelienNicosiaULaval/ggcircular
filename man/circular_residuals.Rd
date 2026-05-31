@@ -24,12 +24,11 @@ produced by the optional \code{CircularRegression} package when their fitted val
 are stored in a \code{mui} component.
 }
 \examples{
-if (requireNamespace("CircularRegression", quietly = TRUE)) {
-  set.seed(1)
-  df <- tibble::tibble(y = normalize_angle(rnorm(30)), x = rnorm(30))
-  fit <- CircularRegression::consensus(y ~ x, data = df)
-  circular_residuals(fit)
-}
+fit <- structure(
+  list(y = c(0, 0.2, 0.4), mui = c(0.05, 0.15, 0.5)),
+  class = "angular"
+)
+circular_residuals(fit)
 }
 \seealso{
 Other circular model helpers: 

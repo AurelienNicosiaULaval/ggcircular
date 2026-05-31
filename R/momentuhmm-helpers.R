@@ -13,6 +13,33 @@ find_angle_column <- function(data, angle = NULL) {
   found[1]
 }
 
+validate_momentuHMM_alignment <- function(data, state, probs = NULL) {
+  n_data <- nrow(data)
+  n_state <- length(state)
+  if (n_data != n_state) {
+    rlang::abort(paste0(
+      "`data` and decoded states have incompatible lengths: ",
+      n_data,
+      " rows in `data`, but ",
+      n_state,
+      " states."
+    ))
+  }
+  if (!is.null(probs)) {
+    n_probs <- nrow(probs)
+    if (is.null(n_probs) || n_probs != n_data) {
+      rlang::abort(paste0(
+        "`stateProbs()` returned incompatible probabilities: ",
+        n_probs %||% "unknown",
+        " rows in the probability matrix, but ",
+        n_data,
+        " rows in `data`."
+      ))
+    }
+  }
+  invisible(NULL)
+}
+
 #' Augment momentuHMM fits with angular states
 #'
 #' Extracts an angle column and inferred states from a fitted `momentuHMM` model.
@@ -57,17 +84,17 @@ augment_momentuHMM_angles <- function(
   if (is.null(state)) {
     rlang::abort("Could not extract states with `momentuHMM::viterbi()` or `momentuHMM::stateProbs()`.")
   }
+  validate_momentuHMM_alignment(data, state = state, probs = probs)
 
-  n <- min(nrow(data), length(state))
   out <- dplyr::bind_cols(
-    data[seq_len(n), , drop = FALSE],
+    data,
     tibble::tibble(
-      .angle = normalize_angle(data[[angle_col]][seq_len(n)]),
-      .state = factor(state[seq_len(n)])
+      .angle = normalize_angle(data[[angle_col]]),
+      .state = factor(state)
     )
   )
   if (!is.null(probs)) {
-    probs <- as.data.frame(probs[seq_len(n), , drop = FALSE])
+    probs <- as.data.frame(probs)
     names(probs) <- paste0(".state_probability_", seq_along(probs))
     out <- dplyr::bind_cols(out, tibble::as_tibble(probs))
   }

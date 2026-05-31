@@ -2,8 +2,11 @@
 ^pkgdown$
 ^\.github$
 ^\.git
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
 ^README\.Rmd$
 ^README\.html$
+^SUPPORT\.md$
 ^TODO\.md$
 ^cran-comments\.md$
 ^docs$

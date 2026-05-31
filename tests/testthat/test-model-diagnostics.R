@@ -33,14 +33,15 @@ test_that("model diagnostics fail on incompatible extracted lengths", {
   expect_error(circular_residuals(object_ok, data = tibble::tibble(id = 1:3)), "same number of rows")
 })
 
-test_that("CircularRegression methods work when the optional package is available", {
-  testthat::skip_if_not_installed("CircularRegression")
-  set.seed(123)
-  df <- tibble::tibble(
-    y = normalize_angle(rnorm(50, mean = 1, sd = 0.4)),
-    x = rnorm(50)
+test_that("consensus class methods dispatch with mock objects", {
+  fit <- structure(
+    list(
+      y = c(0, 0.2, 0.4),
+      mui = c(0.05, 0.15, 0.5),
+      term_labels = c("intercept", "x")
+    ),
+    class = "consensus"
   )
-  fit <- CircularRegression::consensus(y ~ x, data = df)
 
   expect_s3_class(tidy_circular(fit), "tbl_df")
   expect_s3_class(augment_circular(fit), "tbl_df")
@@ -53,14 +54,23 @@ test_that("CircularRegression methods work when the optional package is availabl
   expect_s3_class(ggplot2::autoplot(fit, type = "residuals_index"), "ggplot")
 })
 
-test_that("angular_two_step methods dispatch when available", {
-  testthat::skip_if_not_installed("CircularRegression")
-  set.seed(123)
-  df <- tibble::tibble(
-    y = normalize_angle(rnorm(40, mean = 1, sd = 0.5)),
-    x = rnorm(40)
+test_that("angular_two_step methods dispatch with mock objects", {
+  consensus_fit <- structure(
+    list(y = c(0, 0.2, 0.4), mui = c(0.05, 0.15, 0.5), term_labels = "x"),
+    class = "consensus"
   )
-  fit <- CircularRegression::angular_two_step(y ~ x, data = df)
+  homogeneous_fit <- structure(
+    list(y = c(0, 0.2, 0.4), mui = c(0.04, 0.18, 0.45), term_labels = "x"),
+    class = "angular"
+  )
+  fit <- structure(
+    list(
+      consensus_fit = consensus_fit,
+      homogeneous_fit = homogeneous_fit,
+      reference = "mock"
+    ),
+    class = "angular_two_step"
+  )
 
   expect_s3_class(tidy_circular(fit), "tbl_df")
   expect_s3_class(augment_circular(fit), "tbl_df")
