@@ -39,10 +39,15 @@ Other circular model helpers:
 ## Examples
 
 ``` r
-if (requireNamespace("CircularRegression", quietly = TRUE)) {
-  set.seed(1)
-  df <- tibble::tibble(y = normalize_angle(rnorm(30)), x = rnorm(30))
-  fit <- CircularRegression::consensus(y ~ x, data = df)
-  circular_residuals(fit)
-}
+fit <- structure(
+  list(y = c(0, 0.2, 0.4), mui = c(0.05, 0.15, 0.5)),
+  class = "angular"
+)
+circular_residuals(fit)
+#> # A tibble: 3 × 6
+#>   .observed .fitted  .resid .abs_resid .index .model_class
+#>       <dbl>   <dbl>   <dbl>      <dbl>  <int> <chr>       
+#> 1       0      0.05 -0.0500     0.0500      1 angular     
+#> 2       0.2    0.15  0.0500     0.0500      2 angular     
+#> 3       0.4    0.5  -0.100      0.100       3 angular     
 ```

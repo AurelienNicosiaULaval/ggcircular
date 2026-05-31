@@ -157,6 +157,26 @@ if (requireNamespace("circular", quietly = TRUE)) {
 #> 1       1.06     1.06
 ```
 
+## CRAN readiness checks
+
+The CRAN-oriented validation is intentionally separate from the
+statistical examples above. Before release, the package is checked with:
+
+``` r
+
+devtools::test()
+devtools::check(document = FALSE, args = "--as-cran", build_args = "--no-manual")
+devtools::check(
+  document = FALSE,
+  args = c("--as-cran", "--run-donttest"),
+  build_args = "--no-manual"
+)
+tools::checkRdaFiles("data")
+```
+
+The GitHub Actions workflow also includes a strict hard-dependency
+profile, a full-suggests profile and Linux R-devel.
+
 ## Interpretation
 
 These examples are regression checks for expected behavior. They do not

@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Comparative validation notes">
@@ -60,7 +60,7 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Comparative validation notes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/AurelienNicosiaULaval/ggcircular/blob/HEAD/vignettes/validation-comparative.Rmd" class="external-link"><code>vignettes/validation-comparative.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/vignettes/validation-comparative.Rmd" class="external-link"><code>vignettes/validation-comparative.Rmd</code></a></small>
       <div class="d-none name"><code>validation-comparative.Rmd</code></div>
     </div>
 
@@ -83,9 +83,7 @@ software paper.</p>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.5.2</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.5.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
@@ -110,7 +108,7 @@ software paper.</p>
 <span><span class="co">#&gt;   package     available</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> circular    TRUE     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CircStats   TRUE     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CircStats   FALSE    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> NPCirc      FALSE    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Directional FALSE</span></span></code></pre></div>
 </div>
@@ -137,7 +135,7 @@ software paper.</p>
 <span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="validation-comparative_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672"></p>
+<p><img src="validation-comparative_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="comparison-with-circular-when-available">Comparison with circular when available<a class="anchor" aria-label="anchor" href="#comparison-with-circular-when-available"></a>
@@ -162,8 +160,8 @@ software paper.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
 <span><span class="co">#&gt;   statistic ggcircular circular absolute_difference</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> mean          0.019<span style="text-decoration: underline;">6</span>   0.019<span style="text-decoration: underline;">6</span>                   0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Rbar          0.855    0.855                    0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> mean          0.019<span style="text-decoration: underline;">6</span>   0.019<span style="text-decoration: underline;">6</span>            1.53<span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Rbar          0.855    0.855             0   <span style="color: #949494;"> </span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="uniform-data">Uniform data<a class="anchor" aria-label="anchor" href="#uniform-data"></a>
@@ -179,7 +177,7 @@ software paper.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;    mean     Rbar rayleigh_p_value</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    <span style="color: #BB0000;">NA</span> 2.28<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span>                1</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    <span style="color: #BB0000;">NA</span> 1.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span>                1</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="axial-data">Axial data<a class="anchor" aria-label="anchor" href="#axial-data"></a>
@@ -213,7 +211,7 @@ software paper.</p>
 <span><span class="co">#&gt; (`stat_rose()`).</span></span>
 <span><span class="co">#&gt; Warning: Removed 61 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">#&gt; (`stat_mean_direction()`).</span></span></code></pre></div>
-<p><img src="validation-comparative_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672"></p>
+<p><img src="validation-comparative_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="bimodal-mixture">Bimodal mixture<a class="anchor" aria-label="anchor" href="#bimodal-mixture"></a>
@@ -242,7 +240,7 @@ software paper.</p>
 <span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="validation-comparative_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672"></p>
+<p><img src="validation-comparative_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="timing-proxy">Timing proxy<a class="anchor" aria-label="anchor" href="#timing-proxy"></a>
@@ -258,7 +256,7 @@ software paper.</p>
 <span>  <span class="op">)</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.020   0.001   0.021</span></span>
+<span><span class="co">#&gt;   0.041   0.000   0.042</span></span>
 <span></span>
 <span><span class="va">density_tbl</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n_grid <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, density_min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span>, density_max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span></span>
@@ -294,7 +292,7 @@ profile.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

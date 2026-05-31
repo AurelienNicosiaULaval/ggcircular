@@ -486,27 +486,47 @@ ggplot(wind_directions, aes(x = direction)) +
 
 ## Angular model diagnostics
 
-When the optional `CircularRegression` package is installed,
-`ggcircular` provides basic methods for model summaries and residual
-diagnostics.
+`ggcircular` provides basic methods for angular model summaries and
+residual diagnostics. The example below uses a small mock object with
+the same observed and fitted angle fields expected from supported
+angular model classes.
 
 ``` r
 
-if (requireNamespace("CircularRegression", quietly = TRUE)) {
-  fit <- CircularRegression::consensus(direction ~ speed, data = wind_directions)
+fit <- structure(
+  list(
+    y = wind_directions$direction[1:50],
+    mui = normalize_angle(wind_directions$direction[1:50] + rnorm(50, 0, 0.15)),
+    term_labels = c("intercept", "speed")
+  ),
+  class = "angular"
+)
 
-  tidy_circular(fit)
-  glance_circular(fit)
-  circular_model_diagnostics(fit)
-}
+tidy_circular(fit)
+#> # A tibble: 2 × 2
+#>   term      estimate
+#>   <chr>        <dbl>
+#> 1 intercept        0
+#> 2 speed            0
+glance_circular(fit)
+#> # A tibble: 1 × 7
+#>   model_class  nobs  npar logLik   AIC   BIC kappa
+#>   <chr>       <int> <int>  <dbl> <dbl> <dbl> <dbl>
+#> 1 angular        50     0     NA    NA    NA    NA
+circular_model_diagnostics(fit)
+#> # A tibble: 1 × 6
+#>   model_class     n residual_mean residual_Rbar residual_variance
+#>   <chr>       <int>         <dbl>         <dbl>             <dbl>
+#> 1 angular        50        0.0143         0.987            0.0126
+#> # ℹ 1 more variable: max_abs_residual <dbl>
 ```
 
 ``` r
 
-if (requireNamespace("CircularRegression", quietly = TRUE)) {
-  autoplot(fit, type = "residuals_density")
-}
+autoplot(fit, type = "residuals_density")
 ```
+
+![](ggcircular_files/figure-html/unnamed-chunk-27-1.png)
 
 ## Circular posterior draws
 
