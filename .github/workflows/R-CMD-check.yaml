@@ -33,7 +33,7 @@ jobs:
       _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -44,6 +44,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          dependencies: '"hard"'
           extra-packages: |
             any::rcmdcheck
             any::devtools
@@ -55,7 +56,6 @@ jobs:
             any::broom
             any::circular
             any::posterior
-          needs: check
 
       - uses: r-lib/actions/check-r-package@v2
         with:

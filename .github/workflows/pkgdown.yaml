@@ -19,7 +19,7 @@ jobs:
       _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -30,6 +30,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          dependencies: '"hard"'
           extra-packages: |
             any::pkgdown
             any::devtools
@@ -38,7 +39,6 @@ jobs:
             any::broom
             any::circular
             any::posterior
-          needs: website
 
       - name: Build pkgdown site
         run: pkgdown::build_site()
