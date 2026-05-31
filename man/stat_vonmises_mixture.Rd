@@ -12,6 +12,9 @@ stat_vonmises_mixture(
   ...,
   fit = NULL,
   k = 2,
+  nstart = 1,
+  seed = NULL,
+  kappa_max = 10000,
   n = 512,
   axial = FALSE,
   na.rm = FALSE,
@@ -29,6 +32,13 @@ layer arguments.}
 mixture is fitted to the layer's \code{x} aesthetic.}
 
 \item{k}{Number of components when fitting inside the statistic.}
+
+\item{nstart}{Number of EM starts when fitting inside the statistic.}
+
+\item{seed}{Optional random seed when fitting inside the statistic.}
+
+\item{kappa_max}{Maximum fitted concentration when fitting inside the
+statistic.}
 
 \item{n}{Number of grid points.}
 

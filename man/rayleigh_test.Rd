@@ -17,8 +17,9 @@ rayleigh_test(x, axial = FALSE, na.rm = TRUE)
 An object of class \code{htest}.
 }
 \description{
-Performs the one-sample Rayleigh test for non-uniformity. The returned object
-follows the base \code{htest} structure.
+Performs the one-sample Rayleigh test for non-uniformity. The test is most
+sensitive to unimodal departures from circular uniformity. The returned
+object follows the base \code{htest} structure.
 }
 \seealso{
 Other circular tests: 

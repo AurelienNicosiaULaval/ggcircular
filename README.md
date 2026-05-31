@@ -26,6 +26,11 @@ orientations, times of day, turn angles and other circular measurements.
 
 ## Installation
 
+### Not on CRAN yet
+
+`ggcircular` is not on CRAN yet. Install it from GitHub while the API is
+being stabilized for a first CRAN submission.
+
 Install the development release from GitHub:
 
 ``` r
@@ -91,11 +96,27 @@ wind_directions |>
 - Outputs are standard `ggplot` objects, tibbles or familiar test
   objects.
 
+## Conventions for Directions and Bearings
+
+The default mathematical convention is `zero = "east"` with angles
+increasing counterclockwise. This matches the usual unit circle.
+
+Compass bearings use `zero = "north"` with angles increasing clockwise.
+Use `scale_x_circular_compass()` together with
+`coord_circular(zero = "north", direction = "clockwise")` for
+bearing-like data such as wind direction or movement headings.
+
+Axial data, such as unoriented lines, are different again: `0` and `pi`
+represent the same orientation. Use `axial = TRUE` in summaries and
+layers for these data.
+
 ## Summaries
 
 `circular_summary()` respects existing `dplyr` groups and returns mean
 direction, resultant length, circular variance, circular standard
 deviation and an estimated von Mises concentration parameter.
+`estimate_kappa()` is a descriptive piecewise approximation from the
+sample resultant length, not a full inferential fit.
 
 ``` r
 wind_directions |>
@@ -158,12 +179,20 @@ animal_steps |>
 ## Mixtures of von Mises Distributions
 
 Finite mixtures are fitted with an expectation-maximization routine and
-can be drawn directly on top of empirical rose diagrams.
+can be drawn directly on top of empirical rose diagrams. These fits are
+descriptive and depend on initialization, so use `seed`, `nstart` and
+diagnostic output when the mixture is substantively important.
 
 ``` r
 set.seed(2026)
 
-fit_mix <- fit_vonmises_mixture(wind_directions$direction, k = 2, init = "spaced")
+fit_mix <- fit_vonmises_mixture(
+  wind_directions$direction,
+  k = 2,
+  init = "spaced",
+  nstart = 3,
+  seed = 2026
+)
 
 ggplot(wind_directions, aes(x = direction)) +
   geom_rose(aes(y = after_stat(density)), bins = 24, alpha = 0.42) +
@@ -186,8 +215,8 @@ tidy_circular(fit_mix) |>
 #> # A tibble: 2 × 4
 #>   component proportion mu_degrees kappa
 #>       <int>      <dbl>      <dbl> <dbl>
-#> 1         1      0.337       51.4  1.4
-#> 2         2      0.663      232.   0.78
+#> 1         1      0.328       51.6  1.45
+#> 2         2      0.672      232.   0.77
 ```
 
 ## Tests and Intervals
@@ -244,6 +273,34 @@ Optional helpers currently target:
 - `circular` tests when classical circular test implementations are
   available.
 
+## Experimental Features
+
+The following pieces are intentionally available but still experimental:
+
+- angular model diagnostics for optional external model classes;
+- finite mixtures of von Mises distributions;
+- `momentuHMM` state-angle adapters;
+- spherical summaries and posterior draw helpers.
+
+Experimental functions are documented and tested, but their return
+columns may still be refined before a CRAN release if validation reveals
+a better public contract.
+
+## Statistical Limitations
+
+`ggcircular` is primarily a visualization and diagnostics package. It
+does not replace specialist inference workflows for circular statistics.
+
+- The automatic density bandwidth is a simple heuristic.
+- `circular_mean_ci()` is unreliable when the mean resultant length is
+  close to zero because the mean direction is weakly identified.
+- `rayleigh_test()` is mainly sensitive to unimodal departures from
+  uniformity.
+- `watson_williams_test()` relies on strong assumptions about group
+  concentration and uses the optional `circular` implementation.
+- Multimodal data should usually be inspected with density or mixture
+  graphics, not summarized only by one mean direction.
+
 ## Vignettes
 
 Start with:
@@ -274,6 +331,8 @@ Then see the pkgdown articles:
   helpers](https://aureliennicosiaulaval.github.io/ggcircular/articles/spherical-and-posterior.html)
 - [Scientific validation
   notes](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation.html)
+- [Comparative
+  validation](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation-comparative.html)
 
 ## Development Status
 
@@ -283,10 +342,15 @@ validation cases are added.
 
 Current checks:
 
-- Local `devtools::test()` passes with 111 tests.
-- Local `devtools::check(document = FALSE, build_args = "--no-manual")`
-  passes with 0 errors, 0 warnings and 0 notes.
-- GitHub Actions runs `R CMD check` on Linux, macOS and Windows.
+- Local `devtools::test()` passes.
+- Local
+  `devtools::check(document = FALSE, args = "--as-cran", build_args = "--no-manual")`
+  is used before release commits.
+- GitHub Actions runs hard-dependency checks with
+  `_R_CHECK_FORCE_SUGGESTS_=false` and full-suggests checks when
+  optional packages are available.
+- GitHub Actions includes Linux R-devel plus Linux, macOS and Windows
+  R-release.
 - `pkgdown` builds and publishes the website from `main`.
 
 ## References

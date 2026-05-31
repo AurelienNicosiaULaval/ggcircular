@@ -3,7 +3,9 @@
 #' Computes an approximate confidence interval for a circular mean. The large
 #' sample method uses a normal approximation on the mean direction, while the
 #' bootstrap method resamples angles and forms an interval from angular
-#' deviations around the sample mean.
+#' deviations around the sample mean. These intervals are exploratory; they are
+#' not reliable when the mean resultant length is close to zero and the mean
+#' direction is weakly identified.
 #'
 #' @param x Numeric vector of angles in radians.
 #' @param level Confidence level.
@@ -27,6 +29,11 @@ circular_mean_ci <- function(
   seed = NULL
 ) {
   method <- match.arg(method)
+  validate_ci_level(level)
+  R <- validate_bootstrap_R(R)
+  validate_optional_seed(seed)
+  validate_logical_scalar(axial, "axial")
+  validate_logical_scalar(na.rm, "na.rm")
   check_angle(x)
   if (isTRUE(na.rm)) {
     x <- x[!is.na(x)]
@@ -47,7 +54,9 @@ circular_mean_ci <- function(
     old_seed <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) .Random.seed else NULL
     on.exit({
       if (is.null(old_seed)) {
-        rm(".Random.seed", envir = .GlobalEnv)
+        if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+          rm(".Random.seed", envir = .GlobalEnv)
+        }
       } else {
         assign(".Random.seed", old_seed, envir = .GlobalEnv)
       }
@@ -69,10 +78,42 @@ circular_mean_ci <- function(
   )
 }
 
+validate_ci_level <- function(level) {
+  if (!is.numeric(level) || length(level) != 1L || is.na(level) || !is.finite(level) || level <= 0 || level >= 1) {
+    rlang::abort("`level` must be a single finite number between 0 and 1.")
+  }
+  invisible(level)
+}
+
+validate_bootstrap_R <- function(R) {
+  if (!is.numeric(R) || length(R) != 1L || is.na(R) || !is.finite(R) || R < 1 || R != as.integer(R)) {
+    rlang::abort("`R` must be a single positive integer.")
+  }
+  as.integer(R)
+}
+
+validate_optional_seed <- function(seed) {
+  if (is.null(seed)) {
+    return(invisible(NULL))
+  }
+  if (!is.numeric(seed) || length(seed) != 1L || is.na(seed) || !is.finite(seed) || seed != as.integer(seed)) {
+    rlang::abort("`seed` must be `NULL` or a single integer.")
+  }
+  invisible(seed)
+}
+
+validate_logical_scalar <- function(x, arg) {
+  if (!is.logical(x) || length(x) != 1L || is.na(x)) {
+    rlang::abort(paste0("`", arg, "` must be `TRUE` or `FALSE`."))
+  }
+  invisible(x)
+}
+
 #' Rayleigh test for circular uniformity
 #'
-#' Performs the one-sample Rayleigh test for non-uniformity. The returned object
-#' follows the base `htest` structure.
+#' Performs the one-sample Rayleigh test for non-uniformity. The test is most
+#' sensitive to unimodal departures from circular uniformity. The returned
+#' object follows the base `htest` structure.
 #'
 #' @param x Numeric vector of angles in radians.
 #' @param axial Should data be treated as axial, modulo `pi`?
@@ -113,7 +154,9 @@ rayleigh_test <- function(x, axial = FALSE, na.rm = TRUE) {
 #' Watson-Williams test for equal circular means
 #'
 #' Wrapper around `circular::watson.williams.test()` with explicit optional
-#' dependency handling.
+#' dependency handling. The Watson-Williams test assumes von Mises-like groups
+#' with comparable concentrations and should be used cautiously for small
+#' samples or weakly concentrated data.
 #'
 #' @param x Numeric vector of angles in radians.
 #' @param group Grouping variable.

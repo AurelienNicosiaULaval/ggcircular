@@ -1,0 +1,33 @@
+citHeader("To cite ggcircular and related methodological references, use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "ggcircular: A ggplot2 Extension for Circular and Directional Data",
+  author = person("Aurelien", "Nicosia"),
+  year = "2026",
+  note = "R package version 0.1.0",
+  url = "https://github.com/AurelienNicosiaULaval/ggcircular"
+)
+
+bibentry(
+  bibtype = "Book",
+  title = "Statistical Analysis of Circular Data",
+  author = person("N. I.", "Fisher"),
+  year = "1993",
+  publisher = "Cambridge University Press",
+  doi = "10.1017/CBO9780511564345"
+)
+
+bibentry(
+  bibtype = "Book",
+  title = "Topics in Circular Statistics",
+  author = c(
+    person("S. R.", "Jammalamadaka"),
+    person("A.", "Sengupta")
+  ),
+  year = "2001",
+  publisher = "World Scientific",
+  doi = "10.1142/4031"
+)
+
+citFooter("A Zenodo DOI will be added here after archival release.")

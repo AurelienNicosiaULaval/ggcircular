@@ -10,9 +10,14 @@ fit_vonmises_mixture(
   weights = NULL,
   axial = FALSE,
   init = c("kmeans", "spaced"),
+  nstart = 1,
+  init_params = NULL,
+  kappa_max = 10000,
+  min_component_weight = 1e-08,
   max_iter = 200,
   tol = 1e-08,
-  na.rm = TRUE
+  na.rm = TRUE,
+  seed = NULL
 )
 }
 \arguments{
@@ -26,11 +31,25 @@ fit_vonmises_mixture(
 
 \item{init}{Initialization method, either \code{"kmeans"} or \code{"spaced"}.}
 
+\item{nstart}{Number of EM starts. The fit with the largest log-likelihood
+is retained.}
+
+\item{init_params}{Optional list or data frame with initial \code{proportions},
+\code{mu} and \code{kappa} values.}
+
+\item{kappa_max}{Maximum fitted concentration. This caps nearly degenerate
+components.}
+
+\item{min_component_weight}{Minimum relative component weight before a
+component is reinitialized.}
+
 \item{max_iter}{Maximum number of EM iterations.}
 
 \item{tol}{Convergence tolerance on the log-likelihood.}
 
 \item{na.rm}{Should missing values be removed?}
+
+\item{seed}{Optional random seed used for initialization.}
 }
 \value{
 An object of class \code{ggcircular_vonmises_mixture}.

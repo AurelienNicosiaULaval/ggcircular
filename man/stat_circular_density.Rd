@@ -47,7 +47,9 @@ A ggplot2 layer. Computed variables are \code{x}, \code{density}, \code{scaled},
 \description{
 Estimates a smooth circular density using a von Mises kernel. The density
 wraps around the origin, avoiding the boundary artifacts of a linear kernel
-density estimate.
+density estimate. When \code{bw} is not supplied, the concentration is chosen from
+a simple resultant-length heuristic; it should be treated as an exploratory
+smoothing choice rather than an inferential bandwidth selector.
 }
 \examples{
 ggplot2::ggplot(wind_directions, ggplot2::aes(x = direction)) +

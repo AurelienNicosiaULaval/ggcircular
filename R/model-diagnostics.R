@@ -16,7 +16,7 @@ model_observed <- function(object) {
 
 model_fitted <- function(object) {
   fit <- model_primary_fit(object)
-  fitted <- fit$mui %||% stats::fitted(fit)
+  fitted <- fit$mui %||% tryCatch(stats::fitted(fit), error = function(e) NULL)
   if (is.null(fitted)) {
     rlang::abort("Could not find fitted angular values in the model object.")
   }
@@ -33,7 +33,22 @@ model_residuals <- function(object) {
 
 model_terms <- function(object) {
   fit <- model_primary_fit(object)
-  fit$term_labels %||% fit$paramname %||% names(stats::coef(fit)) %||% character()
+  coef_names <- tryCatch(names(stats::coef(fit)), error = function(e) NULL)
+  fit$term_labels %||% fit$paramname %||% coef_names %||% character()
+}
+
+validate_model_diagnostic_lengths <- function(observed, fitted, data = NULL) {
+  if (length(observed) != length(fitted)) {
+    rlang::abort(
+      "`object` must provide observed and fitted angular values with the same length."
+    )
+  }
+  if (!is.null(data) && nrow(data) != length(observed)) {
+    rlang::abort(
+      "`data` must have the same number of rows as the extracted model diagnostics."
+    )
+  }
+  invisible(NULL)
 }
 
 #' Circular residuals for angular models
@@ -62,9 +77,11 @@ model_terms <- function(object) {
 circular_residuals <- function(object, data = NULL, ...) {
   observed <- normalize_angle(model_observed(object))
   fitted <- normalize_angle(model_fitted(object))
-  n <- min(length(observed), length(fitted))
-  observed <- observed[seq_len(n)]
-  fitted <- fitted[seq_len(n)]
+  if (!is.null(data)) {
+    data <- tibble::as_tibble(data)
+  }
+  validate_model_diagnostic_lengths(observed, fitted, data = data)
+  n <- length(observed)
   resid <- angular_difference(observed, fitted)
 
   out <- tibble::tibble(
@@ -77,9 +94,7 @@ circular_residuals <- function(object, data = NULL, ...) {
   )
 
   if (!is.null(data)) {
-    data <- tibble::as_tibble(data)
-    data <- data[seq_len(min(nrow(data), n)), , drop = FALSE]
-    out <- dplyr::bind_cols(data, out[seq_len(nrow(data)), , drop = FALSE])
+    out <- dplyr::bind_cols(data, out)
   }
   out
 }

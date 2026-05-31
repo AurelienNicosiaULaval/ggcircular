@@ -18,7 +18,9 @@ An object returned by \code{circular::watson.williams.test()}.
 }
 \description{
 Wrapper around \code{circular::watson.williams.test()} with explicit optional
-dependency handling.
+dependency handling. The Watson-Williams test assumes von Mises-like groups
+with comparable concentrations and should be used cautiously for small
+samples or weakly concentrated data.
 }
 \seealso{
 Other circular tests: 

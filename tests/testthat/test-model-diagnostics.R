@@ -1,3 +1,38 @@
+test_that("model diagnostics work with mock angular objects", {
+  object <- structure(
+    list(
+      y = c(0, 0.2, 0.4),
+      mui = c(0.05, 0.15, 0.5),
+      term_labels = c("intercept", "x")
+    ),
+    class = "angular"
+  )
+  data <- tibble::tibble(id = 1:3)
+
+  res <- circular_residuals(object, data = data)
+
+  expect_s3_class(tidy_circular(object), "tbl_df")
+  expect_s3_class(augment_circular(object), "tbl_df")
+  expect_s3_class(glance_circular(object), "tbl_df")
+  expect_equal(nrow(res), 3)
+  expect_equal(res$id, 1:3)
+  expect_equal(res$.model_class, rep("angular", 3))
+})
+
+test_that("model diagnostics fail on incompatible extracted lengths", {
+  object <- structure(
+    list(y = c(0, 0.2, 0.4), mui = c(0.05, 0.15)),
+    class = "angular"
+  )
+  object_ok <- structure(
+    list(y = c(0, 0.2), mui = c(0.05, 0.15)),
+    class = "angular"
+  )
+
+  expect_error(circular_residuals(object), "same length")
+  expect_error(circular_residuals(object_ok, data = tibble::tibble(id = 1:3)), "same number of rows")
+})
+
 test_that("CircularRegression methods work when the optional package is available", {
   testthat::skip_if_not_installed("CircularRegression")
   set.seed(123)

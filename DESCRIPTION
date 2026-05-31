@@ -8,6 +8,7 @@ License: MIT + file LICENSE
 URL: https://github.com/AurelienNicosiaULaval/ggcircular, https://aureliennicosiaulaval.github.io/ggcircular/
 BugReports: https://github.com/AurelienNicosiaULaval/ggcircular/issues
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends:
@@ -23,19 +24,17 @@ Imports:
     utils,
     vctrs
 Suggests:
-    broom,
     CircularRegression,
     circular,
-    covr,
-    devtools,
     knitr,
     momentuHMM,
-    movMF,
-    pkgdown,
     posterior,
     rmarkdown,
-    testthat (>= 3.0.0),
-    withr
+    testthat (>= 3.0.0)
+Config/Needs/coverage:
+    covr
+Config/Needs/website:
+    pkgdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 LazyData: true

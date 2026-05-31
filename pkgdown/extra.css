@@ -1,3 +1,7 @@
 #main > p:first-child:has(> img[alt="ggcircular hex logo"]) {
   display: none;
 }
+
+.template-home #main > p:first-child {
+  display: none;
+}

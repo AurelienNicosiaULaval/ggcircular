@@ -6,6 +6,7 @@
 .DS_Store
 *.tar.gz
 *.Rcheck/
+README.html
 Rplots.pdf
 docs/.DS_Store
 tests/.DS_Store
