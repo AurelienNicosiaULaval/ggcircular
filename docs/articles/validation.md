@@ -37,7 +37,7 @@ tibble(
 #> # A tibble: 1 × 3
 #>   arithmetic_mean circular_mean  Rbar
 #>             <dbl>         <dbl> <dbl>
-#> 1            3.14      3.04e-17 0.999
+#> 1            3.14             0 0.999
 ```
 
 ## Axial behavior
@@ -57,8 +57,8 @@ tibble(
 #> # A tibble: 2 × 3
 #>   setting      mean     Rbar
 #>   <chr>       <dbl>    <dbl>
-#> 1 directional NA    6.12e-17
-#> 2 axial        3.14 1   e+ 0
+#> 1 directional    NA 6.12e-17
+#> 2 axial           0 1   e+ 0
 ```
 
 ## Known mean direction

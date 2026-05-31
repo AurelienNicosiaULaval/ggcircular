@@ -44,7 +44,7 @@ boundary_angles |>
 #> # A tibble: 1 × 3
 #>   arithmetic_mean circular_mean  Rbar
 #>             <dbl>         <dbl> <dbl>
-#> 1            3.14      1.22e-17 0.997
+#> 1            3.14             0 0.997
 ```
 
 The arithmetic mean is near `pi`, even though the observations are
@@ -143,8 +143,8 @@ tibble(
 #> # A tibble: 2 × 3
 #>   case            Rbar  mean
 #>   <chr>          <dbl> <dbl>
-#> 1 directional 6.12e-17 NA   
-#> 2 axial       1   e+ 0  3.14
+#> 1 directional 6.12e-17    NA
+#> 2 axial       1   e+ 0     0
 ```
 
 For axial calculations, `ggcircular` doubles the angles internally,

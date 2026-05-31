@@ -102,7 +102,7 @@ This means that linear tools can fail near the boundary.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   arithmetic_mean circular_mean  Rbar</span></span>
 <span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            3.14      1.22<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> 0.997</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            3.14             0 0.997</span></span></code></pre></div>
 <p>The arithmetic mean is near <code>pi</code>, even though the
 observations are concentrated near zero. The circular mean uses sine and
 cosine components, so it respects the periodic scale.</p>
@@ -193,8 +193,8 @@ are equivalent.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
 <span><span class="co">#&gt;   case            Rbar  mean</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> directional 6.12<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> axial       1   <span style="color: #949494;">e</span>+ 0  3.14</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> directional 6.12<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span>    <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> axial       1   <span style="color: #949494;">e</span>+ 0     0</span></span></code></pre></div>
 <p>For axial calculations, <code>ggcircular</code> doubles the angles
 internally, computes the directional statistic, then transforms the
 answer back to the original scale.</p>
