@@ -1,6 +1,6 @@
 Package: ggcircular
 Title: A ggplot2 Extension for Circular and Directional Data
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R:
     person("Aurélien", "Nicosia", email = "aurelien.nicosia@mat.ulaval.ca", role = c("aut", "cre"))
 Description: Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions and movement data visualizations.

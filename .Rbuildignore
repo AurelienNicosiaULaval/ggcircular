@@ -1,6 +1,8 @@
 ^_pkgdown\.yml$
+^\.github$
 ^README\.Rmd$
 ^TODO\.md$
+^cran-comments\.md$
 ^docs$
 ^Rplots\.pdf$
 ^\.Rbuildignore$
