@@ -62,85 +62,469 @@
     
     
 <div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><code>ggcircular</code> extends <code>ggplot2</code> for circular,
+axial and directional data. This vignette gives a complete first tour of
+the package: angle conventions, rose diagrams, circular densities, mean
+directions, uncertainty, axial data, movement data, mixtures of von
+Mises distributions and model diagnostics.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.5.2</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.5.2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AurelienNicosiaULaval/ggcircular" class="external-link">ggcircular</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="why-circular-data-are-different">Why circular data are different<a class="anchor" aria-label="anchor" href="#why-circular-data-are-different"></a>
 </h2>
 <p>Circular observations live on a periodic scale. In radians,
-<code>0</code> and <code>2 * pi</code> represent the same direction. A
-linear histogram or arithmetic mean can be misleading when observations
-concentrate near the boundary.</p>
+<code>0</code> and <code>2 * pi</code> represent the same direction.
+This means that linear tools can fail near the boundary.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">boundary_angles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">-</span> <span class="fl">0.10</span>, <span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">-</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">boundary_angles</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    arithmetic_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span>,</span>
+<span>    circular_mean <span class="op">=</span> <span class="fu"><a href="../reference/mean_direction.html">mean_direction</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span>,</span>
+<span>    Rbar <span class="op">=</span> <span class="fu"><a href="../reference/mean_resultant_length.html">mean_resultant_length</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
+<span><span class="co">#&gt;   arithmetic_mean circular_mean  Rbar</span></span>
+<span><span class="co">#&gt;             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            3.14      1.22<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span> 0.997</span></span></code></pre></div>
+<p>The arithmetic mean is near <code>pi</code>, even though the
+observations are concentrated near zero. The circular mean uses sine and
+cosine components, so it respects the periodic scale.</p>
+</div>
+<div class="section level2">
+<h2 id="data-included-in-the-package">Data included in the package<a class="anchor" aria-label="anchor" href="#data-included-in-the-package"></a>
+</h2>
+<p>The package ships with four simulated datasets. They are small enough
+for examples and large enough to show realistic grouped workflows.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 500</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; $ station   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "station_C"<span style="color: #949494;">, </span>"station_B"<span style="color: #949494;">, </span>"station_B"<span style="color: #949494;">, </span>"station_B"<span style="color: #949494;">, </span>"station…</span></span>
+<span><span class="co">#&gt; $ direction <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.61399414<span style="color: #949494;">, </span>0.51640381<span style="color: #949494;">, </span>3.18127144<span style="color: #949494;">, </span>2.81398312<span style="color: #949494;">, </span>3.48203785<span style="color: #949494;">, </span>…</span></span>
+<span><span class="co">#&gt; $ speed     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 8.344303<span style="color: #949494;">, </span>21.651462<span style="color: #949494;">, </span>18.502725<span style="color: #949494;">, </span>17.959547<span style="color: #949494;">, </span>14.707662<span style="color: #949494;">, </span>23.812…</span></span>
+<span><span class="co">#&gt; $ season    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "summer"<span style="color: #949494;">, </span>"winter"<span style="color: #949494;">, </span>"summer"<span style="color: #949494;">, </span>"spring"<span style="color: #949494;">, </span>"summer"<span style="color: #949494;">, </span>"winter"<span style="color: #949494;">, </span>…</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">animal_steps</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 600</span></span>
+<span><span class="co">#&gt; Columns: 8</span></span>
+<span><span class="co">#&gt; $ id          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "animal_1"<span style="color: #949494;">, </span>"animal_1"<span style="color: #949494;">, </span>"animal_1"<span style="color: #949494;">, </span>"animal_1"<span style="color: #949494;">, </span>"animal_1"…</span></span>
+<span><span class="co">#&gt; $ time        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1<span style="color: #949494;">, </span>2<span style="color: #949494;">, </span>3<span style="color: #949494;">, </span>4<span style="color: #949494;">, </span>5<span style="color: #949494;">, </span>6<span style="color: #949494;">, </span>7<span style="color: #949494;">, </span>8<span style="color: #949494;">, </span>9<span style="color: #949494;">, </span>10<span style="color: #949494;">, </span>11<span style="color: #949494;">, </span>12<span style="color: #949494;">, </span>13<span style="color: #949494;">, </span>14<span style="color: #949494;">, </span>15<span style="color: #949494;">, </span>16<span style="color: #949494;">, </span>17<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ x           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -2.0936857<span style="color: #949494;">, </span>-1.2574724<span style="color: #949494;">, </span>1.3703509<span style="color: #949494;">, </span>1.8277511<span style="color: #949494;">, </span>3.1477115<span style="color: #949494;">, </span>3…</span></span>
+<span><span class="co">#&gt; $ y           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -2.206504<span style="color: #949494;">, </span>-4.007244<span style="color: #949494;">, </span>-5.236538<span style="color: #949494;">, </span>-5.303458<span style="color: #949494;">, </span>-5.208255<span style="color: #949494;">, </span>-5.…</span></span>
+<span><span class="co">#&gt; $ step_length <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span>1.9854255<span style="color: #949494;">, </span>2.9011413<span style="color: #949494;">, </span>0.4622696<span style="color: #949494;">, </span>1.3233892<span style="color: #949494;">, </span>0.1811402<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ bearing     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span>5.14713037<span style="color: #949494;">, </span>5.84562829<span style="color: #949494;">, </span>6.13791093<span style="color: #949494;">, </span>0.07200064<span style="color: #949494;">, </span>0.1664…</span></span>
+<span><span class="co">#&gt; $ turn_angle  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span>0.69849792<span style="color: #949494;">, </span>0.29228264<span style="color: #949494;">, </span>0.21727502<span style="color: #949494;">, </span>0.09441297<span style="color: #949494;">, </span>-2…</span></span>
+<span><span class="co">#&gt; $ state       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "exploratory"<span style="color: #949494;">, </span>"directed"<span style="color: #949494;">, </span>"exploratory"<span style="color: #949494;">, </span>"encamped"<span style="color: #949494;">, </span>"dir…</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">hourly_activity</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 240</span></span>
+<span><span class="co">#&gt; Columns: 5</span></span>
+<span><span class="co">#&gt; $ id       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "id_1"<span style="color: #949494;">, </span>"id_1"<span style="color: #949494;">, </span>"id_1"<span style="color: #949494;">, </span>"id_1"<span style="color: #949494;">, </span>"id_1"<span style="color: #949494;">, </span>"id_1"<span style="color: #949494;">, </span>"id_1"<span style="color: #949494;">, </span>"id_1…</span></span>
+<span><span class="co">#&gt; $ hour     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 0<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>2<span style="color: #949494;">, </span>3<span style="color: #949494;">, </span>4<span style="color: #949494;">, </span>5<span style="color: #949494;">, </span>6<span style="color: #949494;">, </span>7<span style="color: #949494;">, </span>8<span style="color: #949494;">, </span>9<span style="color: #949494;">, </span>10<span style="color: #949494;">, </span>11<span style="color: #949494;">, </span>12<span style="color: #949494;">, </span>13<span style="color: #949494;">, </span>14<span style="color: #949494;">, </span>15<span style="color: #949494;">, </span>16<span style="color: #949494;">, </span>17<span style="color: #949494;">,</span>…</span></span>
+<span><span class="co">#&gt; $ angle    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.0000000<span style="color: #949494;">, </span>0.2617994<span style="color: #949494;">, </span>0.5235988<span style="color: #949494;">, </span>0.7853982<span style="color: #949494;">, </span>1.0471976<span style="color: #949494;">, </span>1.3089…</span></span>
+<span><span class="co">#&gt; $ activity <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.7068110<span style="color: #949494;">, </span>0.9307937<span style="color: #949494;">, </span>0.8454886<span style="color: #949494;">, </span>1.1279882<span style="color: #949494;">, </span>1.2763149<span style="color: #949494;">, </span>1.8896…</span></span>
+<span><span class="co">#&gt; $ group    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "control"<span style="color: #949494;">, </span>"control"<span style="color: #949494;">, </span>"control"<span style="color: #949494;">, </span>"control"<span style="color: #949494;">, </span>"control"<span style="color: #949494;">, </span>"contr…</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">axial_orientations</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 300</span></span>
+<span><span class="co">#&gt; Columns: 3</span></span>
+<span><span class="co">#&gt; $ sample      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sample_4"<span style="color: #949494;">, </span>"sample_9"<span style="color: #949494;">, </span>"sample_1"<span style="color: #949494;">, </span>"sample_3"<span style="color: #949494;">, </span>"sample_7"…</span></span>
+<span><span class="co">#&gt; $ orientation <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.33720049<span style="color: #949494;">, </span>1.29682693<span style="color: #949494;">, </span>0.90355276<span style="color: #949494;">, </span>1.08422434<span style="color: #949494;">, </span>1.01917603…</span></span>
+<span><span class="co">#&gt; $ group       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "A"<span style="color: #949494;">, </span>"C"<span style="color: #949494;">, </span>"B"<span style="color: #949494;">, </span>"C"<span style="color: #949494;">, </span>"C"<span style="color: #949494;">, </span>"C"<span style="color: #949494;">, </span>"B"<span style="color: #949494;">, </span>"C"<span style="color: #949494;">, </span>"A"<span style="color: #949494;">, </span>"A"<span style="color: #949494;">, </span>"B"<span style="color: #949494;">, </span>"A"…</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wind_directions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">season</span>, <span class="va">station</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 16 × 3</span></span></span>
+<span><span class="co">#&gt;    season station       n</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> fall   station_A    40</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> fall   station_B    31</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> fall   station_C    27</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> fall   station_D    33</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> spring station_A    32</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> spring station_B    26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> spring station_C    31</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> spring station_D    26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> summer station_A    21</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> summer station_B    36</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> summer station_C    42</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> summer station_D    39</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> winter station_A    17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> winter station_B    33</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> winter station_C    27</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> winter station_D    39</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="directional-versus-axial-data">Directional versus axial data<a class="anchor" aria-label="anchor" href="#directional-versus-axial-data"></a>
 </h2>
-<p>Directional data have an arrow: north and south are different
-directions. Axial data have an orientation but no arrow: an angle and
-the angle plus <code>pi</code> are equivalent. <code>ggcircular</code>
-exposes an <code>axial = TRUE</code> argument in the core statistics and
-geoms. Internally, the usual calculation doubles the angles, computes
-directional summaries, then divides the resulting angle by two.</p>
+<p>Directional data have an arrow. For example, a bearing of north and a
+bearing of south are different directions. Axial data have an
+orientation but no arrow, so an angle and the angle plus <code>pi</code>
+are equivalent.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">directional</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">pi</span><span class="op">)</span></span>
+<span><span class="va">axial</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">pi</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  case <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"directional"</span>, <span class="st">"axial"</span><span class="op">)</span>,</span>
+<span>  Rbar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/mean_resultant_length.html">mean_resultant_length</a></span><span class="op">(</span><span class="va">directional</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/mean_resultant_length.html">mean_resultant_length</a></span><span class="op">(</span><span class="va">axial</span>, axial <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/mean_direction.html">mean_direction</a></span><span class="op">(</span><span class="va">directional</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/mean_direction.html">mean_direction</a></span><span class="op">(</span><span class="va">axial</span>, axial <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
+<span><span class="co">#&gt;   case            Rbar  mean</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> directional 6.12<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span>    <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> axial       1   <span style="color: #949494;">e</span>+ 0     0</span></span></code></pre></div>
+<p>For axial calculations, <code>ggcircular</code> doubles the angles
+internally, computes the directional statistic, then transforms the
+answer back to the original scale.</p>
 </div>
 <div class="section level2">
-<h2 id="why-a-standard-histogram-is-not-enough">Why a standard histogram is not enough<a class="anchor" aria-label="anchor" href="#why-a-standard-histogram-is-not-enough"></a>
+<h2 id="angle-conventions">Angle conventions<a class="anchor" aria-label="anchor" href="#angle-conventions"></a>
 </h2>
-<p>The first and last bins of a circular histogram are adjacent on the
-circle. A rose diagram respects this topology when combined with a polar
-coordinate system.</p>
-</div>
-<div class="section level2">
-<h2 id="the-ggplot2-logic">The ggplot2 logic<a class="anchor" aria-label="anchor" href="#the-ggplot2-logic"></a>
-</h2>
-<p><code>ggcircular</code> layers are ordinary <code>ggplot2</code>
-layers. They can be added to plots, faceted, grouped and combined with
-familiar scales and themes.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.5.2</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AurelienNicosiaULaval/ggcircular" class="external-link">ggcircular</a></span><span class="op">)</span></span></code></pre></div>
+<p>The internal default unit is radians. Helpers are provided for
+degrees, hours and compass labels.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  degrees <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">270</span><span class="op">)</span>,</span>
+<span>  radians <span class="op">=</span> <span class="fu"><a href="../reference/deg_to_rad.html">deg_to_rad</a></span><span class="op">(</span><span class="va">degrees</span><span class="op">)</span>,</span>
+<span>  hours <span class="op">=</span> <span class="fu"><a href="../reference/rad_to_hour.html">rad_to_hour</a></span><span class="op">(</span><span class="va">radians</span><span class="op">)</span>,</span>
+<span>  compass <span class="op">=</span> <span class="fu"><a href="../reference/rad_to_compass.html">rad_to_compass</a></span><span class="op">(</span><span class="va">radians</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
+<span><span class="co">#&gt;   degrees radians hours compass</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>       0    0        0 N      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>      90    1.57     6 E      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     180    3.14    12 S      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     270    4.71    18 W</span></span></code></pre></div>
+<p>Compass labels use the bearing convention: zero points north and
+angles increase clockwise. Use this with
+<code>coord_circular(zero = "north", direction = "clockwise")</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="first-rose-diagram">First rose diagram<a class="anchor" aria-label="anchor" href="#first-rose-diagram"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>A rose diagram is a circular histogram. The first and last bins are
+adjacent on the circle.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggcircular_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672"></p>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672"></p>
 </div>
 <div class="section level2">
-<h2 id="add-density-and-mean">Add density and mean<a class="anchor" aria-label="anchor" href="#add-density-and-mean"></a>
+<h2 id="counts-densities-and-proportions">Counts, densities and proportions<a class="anchor" aria-label="anchor" href="#counts-densities-and-proportions"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p><code><a href="../reference/geom_rose.html">geom_rose()</a></code> exposes computed variables such as
+<code>count</code>, <code>density</code> and <code>proportion</code>.
+These are available with <code><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat()</a></code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">proportion</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    bins <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>    normalize <span class="op">=</span> <span class="st">"proportion"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_rose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="groups-and-facets">Groups and facets<a class="anchor" aria-label="anchor" href="#groups-and-facets"></a>
+</h2>
+<p>Because the layers follow the <code>ggplot2</code> grammar, standard
+grouping, colouring and faceting workflows work naturally.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span>, fill <span class="op">=</span> <span class="va">season</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">season</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="circular-density">Circular density<a class="anchor" aria-label="anchor" href="#circular-density"></a>
+</h2>
+<p><code><a href="../reference/geom_circular_density.html">geom_circular_density()</a></code> estimates a smooth density on
+the circle using a von Mises kernel. The estimate wraps around the
+origin.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggcircular_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672"></p>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672"></p>
+<p>The bandwidth can be adjusted. Smaller values show more local
+variation.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>bw <span class="op">=</span> <span class="fl">0.25</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>bw <span class="op">=</span> <span class="fl">0.75</span>, linetype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672"></p>
 </div>
 <div class="section level2">
-<h2 id="choose-units">Choose units<a class="anchor" aria-label="anchor" href="#choose-units"></a>
+<h2 id="mean-direction-and-resultant-length">Mean direction and resultant length<a class="anchor" aria-label="anchor" href="#mean-direction-and-resultant-length"></a>
 </h2>
-<p>The package includes x scales for radians, degrees, hours and compass
-labels. Compass labels are intended for use with
-<code>coord_circular(zero = "north", direction = "clockwise")</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>The mean resultant length <code>Rbar</code> measures concentration.
+Values close to one indicate strong concentration; values close to zero
+indicate weak or cancelling directionality.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wind_directions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">season</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/circular_summary.html">circular_summary</a></span><span class="op">(</span><span class="va">direction</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 8</span></span></span>
+<span><span class="co">#&gt;   season     n  mean     R  Rbar variance    sd kappa</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> fall     131 5.42  106.  0.811   0.189  0.647  3.00</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> spring   115 2.36   92.3 0.802   0.198  0.664  2.89</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> summer   138 3.90  120.  0.870   0.130  0.528  4.15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> winter   116 0.842 105.  0.904   0.095<span style="text-decoration: underline;">6</span> 0.448  5.52</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span>, colour <span class="op">=</span> <span class="va">season</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"resultant"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-14-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="uncertainty-and-circular-tests">Uncertainty and circular tests<a class="anchor" aria-label="anchor" href="#uncertainty-and-circular-tests"></a>
+</h2>
+<p><code><a href="../reference/circular_mean_ci.html">circular_mean_ci()</a></code> computes large-sample or bootstrap
+intervals for the mean direction. <code><a href="../reference/rayleigh_test.html">rayleigh_test()</a></code> provides
+a basic test against circular uniformity.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/circular_mean_ci.html">circular_mean_ci</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span>, method <span class="op">=</span> <span class="st">"large_sample"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 7</span></span></span>
+<span><span class="co">#&gt;    mean lower upper level method           n   Rbar</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  4.10  3.72  4.49  0.95 large_sample   500 0.049<span style="text-decoration: underline;">4</span></span></span>
+<span><span class="fu"><a href="../reference/rayleigh_test.html">rayleigh_test</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Rayleigh test of circular uniformity</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  c(3.61399414214871, 0.516403808686312, 3.18127143608671, 2.81398312066174, 3.48203785207672, 0.56424680709192, 0.629856683201911, 5.13158541730147, 0.857734675514404, 5.52884932182807, 6.14565025509431, 3.39186111855533, 5.68072279739308, 4.61418407964105, 4.74543931715619, 0.561767051885953, 3.93703683208835, 4.27621516412755, 0.88537547466561, 3.38244973375004, 4.54086340127989, 0.0252624877997549, 4.27062854516948, 3.97637694706441, 5.85083657554049, 5.87445936548537, 1.58836065931894, 3.77285531449948, 2.84978104987197, 3.65012027729075, 5.46563648989713, 4.10415613798566, 3.75388329273006, 3.98584710606474, 2.82144437086184, 1.50629832290545, 2.18486780537149, 1.55751051364113, 0.0276964845286848, 1.50071871494719, 5.4254641199483, 0.543084919785049, 3.16092065452067, 5.19124427895539, 6.19464201355272, 1.95365834413386, 1.75825901233488, 1.52372125275916, 1.30632888111883, 0.592208207194502, 2.48457594188947, 4.31585345061938, 3.2081127490451, 0.491798377205358, 2.10165361682883, 5.06620154208669, 0.663659415378715, 3.8895585724636, 3.91314585258669, 1.06943034646083, 3.70329020667088, 2.88997331413771, 1.25949333727748, 1.10349295627909, 5.48850298910456, 1.47392385975173, 1.53744771382702, 3.27633450940558, 6.02390363373308, 6.04815804577962, 2.26952313373199, 2.90608819205143, 3.86241193458018, 5.67412084741953, 3.26452859880416, 6.15350006888704, 5.48688255166703, 6.20791616467307, 3.68384365075044, 0.171424413263971, 1.22289990351848, 0.753079742018805, 5.13935788342828, 2.45542670127482, 0.745611903805254, 2.90938404806413, 2.74702586427139, 2.9514284893538, 2.27968831808027, 4.21823280781812, 4.30722391611882, 4.35748350312151, 5.65527822664119, 2.58867423785994, 3.13349236913869, 4.92601382435363, 1.3803664201544, 3.98074646585331, 0.241589583703272, 2.89416586974954, 4.78777809195007, 4.83810271328066, 1.79223368965479, 0.511613556058242, 4.3573339243357, 5.28646241936886, 0.527295585374115, 1.18807009034664, 5.83711134904222, 1.36989616319516, 2.87273782201903, 0.915014496611803, 2.32383561388706, 1.07966269956572, 4.01434607511189, 0.78462043869988, 5.46885293945382, 2.0118951346537, 5.55594286546511, 5.12698629884893, 1.19399119318522, 4.6409638519865, 0.372762827035868, 1.45477015543137, 6.1665437109926, 1.28558438743651, 3.84557068529067, 1.52635330490985, 3.07239368846469, 6.11836229228667, 5.51099187302794, 3.93918610415792, 3.56348178691564, 4.49677867159495, 3.85603721315972, 5.27373647197434, 4.48989903834052, 3.95919733894795, 3.6631658843697, 3.91174484376691, 2.23336435474006, 4.66503636345594, 5.69533325146029, 4.18078449624687, 1.17748434276607, 4.51542532015402, 1.38092818189996, 3.95863852463007, 4.86465650655373, 0.600031048441578, 5.64903433508069, 1.49945938128569, 1.13458378165887, 0.318720239109591, 0.937741030581609, 5.12272810621474, 2.69642747561964, 4.01835946823438, 0.821530057207844, 1.95574045975733, 0.952019577721132, 0.128785533480376, 1.93701079091507, 0.622326941415605, 3.81490338273784, 5.83318150760357, 4.80788354300373, 0.883680527329103, 2.03227696333366, 4.97480147885834, 2.53652203973757, 1.74609782105209, 5.31644410247321, 0.903501240888298, 1.40581408618352, 3.21798275606962, 3.4557590373251, 2.95845594631303, 1.24035058000518, 3.87818094178941, 4.06566783092223, 0.343587710646396, 1.64113506597964, 0.678143008925494, 3.10340916394715, 2.5234856281277, 4.076998724402, 0.227939389240854, 3.75293327615498, 0.745681375843156, 1.79773893567552, 4.64801929729362, 1.94577117034086, 2.5558571758186, 2.39320922469584, 4.93891730713478, 2.32486289997962, 1.63037333578965, 3.31520453696742, 5.30841845365601, 0.372030516182691, 2.78085103499691, 2.40916313762562, 2.76513836870851, 1.59553887068255, 3.92070775491521, 5.05790011995272, 2.35287611790499, 2.96528228895961, 4.32666169122151, 5.9072978350119, 3.83027765097782, 3.2164940873178, 5.70351195300256, 0.93247661803657, 5.15238639384105, 0.663953990503612, 5.66157231365886, 3.26171462649326, 1.45713601377082, 3.2983967872763, 1.95136053171296, 3.23351222754238, 4.78975722517733, 4.78186452379316, 3.695640374107, 4.8271958451668, 3.46123341534021, 5.57630440902539, 4.26989964224631, 0.350949155615401, 4.85043816877712, 1.43186037992258, 2.9749726389762, 5.84270909645015, 1.05597071241368, 5.45235967630183, 3.84902337434668, 2.17245168749446, 3.04717565556487, 5.84461210176993, 5.36426807769498, 6.09912805998087, 4.96680757207252, 4.05948061120776, 2.07519546021824, 2.84033536028553, 0.168823611299175, 1.70977104893379, 5.92098890272642, 3.26949882414043, 5.23428948002588, 1.69190192004778, 6.19346211529975, 4.49696023320816, 6.19446684610556, 3.7893701417916, 3.49909055641389, 5.40819799265068, 1.8846391290683, 1.21393910596394, 1.21552400584744, 3.6349745442456, 2.4634378399828, 1.95306022103064, 0.676993988570905, 3.93214167937047, 1.54946198744965, 4.36385094219077, 4.20260744900989, 0.82460022269939, 1.96563404453465, 5.47075647306217, 3.49105040587683, 3.32335522684759, 3.33345535109043, 5.84242928774451, 4.31021463398591, 0.830616800713155, 1.87429063250033, 4.63676047700973, 2.98274202524661, 5.32117631336934, 1.87580316931015, 4.14713947391929, 2.90022394794143, 6.02877873150384, 0.877728151162343, 0.766619044785883, 2.5228198449887, 1.18336686064368, 5.32978254102456, 0.480816221958569, 5.26714356331552, 4.43017298701401, 2.97367368861929, 0.741214166998673, 4.01559877502578, 0.305708772610524, 5.35578150769504, 5.67224213603809, 4.72340182475188, 5.10106676375622, 4.93432516183874, 3.54912615605738, 2.467008898568, 0.383693716213354, 4.1778110374832, 5.93580811375246, 2.22148314590711, 0.695143195391176, 2.56660094585538, 3.86451460546857, 4.75595722432728, 1.8508640878299, 2.85188077385315, 1.13650012641987, 1.85183397114663, 0.760046058469871, 4.66854906429729, 4.59375721951795, 5.97713848300698, 4.86285468485826, 2.71991476947419, 2.30715292875096, 0.877103345327341, 2.53242534640893, 4.61919504110127, 1.59021218025985, 2.01634243854563, 6.03532149675354, 3.52272992491007, 6.20511867529189, 2.94036438670711, 4.28094051000119, 6.08817754236178, 4.28050227060493, 3.94257340390048, 2.27807075458384, 0.37966828266774, 1.07007046003566, 3.6314960185085, 3.85761184272218, 0.290280604702401, 5.77985344386501, 5.83270710164554, 1.0174845770154, 2.89615963673962, 1.58107936514707, 5.91740372236149, 0.970114871729027, 1.42482016242241, 6.16857082735071, 2.76323109090468, 1.50286652193992, 2.10460490221135, 5.24362452608994, 3.67674993950874, 4.684245743071, 5.06986407882866, 4.19961987159562, 4.06181456709559, 3.71015031090074, 0.568004519325911, 5.02362397605336, 4.06902374222269, 4.00670250402605, 3.99406586291155, 3.02690407702263, 0.24204898447192, 3.67884707982449, 4.17390245121511, 1.0501552383401, 5.48554177000912, 3.2534035574453, 0.607437218823521, 2.32387054099722, 4.68929088864066, 5.6327029123215, 1.06305238835461, 1.40510154106626, 1.33926684832572, 2.9193216111759, 1.36233590748847, 5.47739489161281, 3.65710105949873, 0.276645059413112, 0.176706690397123, 1.32381779895136, 3.13413908979964, 0.967610140820129, 3.19004724297362, 3.73572342516266, 0.698842921725046, 4.87416618466692, 5.15402319845046, 4.17140260230116, 5.00153849029061, 0.497819145365931, 4.20328951404635, 0.702392839987015, 3.829295278135, 4.73868633902796, 2.99753719488559, 4.05278142217793, 4.67147517252104, 5.06141329630149, 5.54698117956277, 4.11173633921752, 0.165202227483394, 3.91069891339029, 0.383561820290968, 1.55022261592284, 3.25518382541973, 3.84110621092413, 4.56659839277621, 1.08653834341982, 3.04694149757914, 4.48987968990351, 5.11734368389185, 5.66475271719934, 4.17889337704655, 2.85817235346097, 2.6159630514743, 3.03108419307564, 5.54107102563832, 3.53607034711238, 6.26809787788282, 2.31698401678689, 3.74576011697637, 0.864108209209264, 1.5802118303633, 3.6517313682625, 3.36357147943932, 4.58533773954467, 3.19103194878316, 4.03384706710371, 4.76106093475281, 4.81901276141423, 1.23977284481888, 4.12784986364102, 3.56797141334475, 0.896458792049424, 3.70970605097961, 3.54969636829351, 3.2062230604813, 2.77985955675029, 1.22432857910086, 4.93259138319717, 2.46775799862233, 3.0081898503984, 4.46876212802286, 4.57781331054168, 0.552753637975135, 0.324650573480147, 0.728226014527112, 3.93153251949303, 1.21838451558546, 5.20699823430224, 6.24801251078914, 0.239056878808596, 1.02192634247736, 1.85186911144518, 5.62985543179424, 0.816738462684404, 0.8208128687534, 4.79467712783871, 1.22335103227416, 6.15681766244913, 2.18445569446985, 4.02130822642411, 2.57709436969584, 5.71567719459435, 5.55723921768227, 4.36715762912422, 0.00707276489959519, 3.40550301804636, 4.02396304780405, 0.146235683957278, 2.89089615037712, 5.14749594931166, 0.416423364443049, 1.6892383377323, 5.45251947827975, 3.68341682083734, 5.65190756066476, 3.6106115015918, 1.62664317760994, 0.679671124258451, 1.25048140461135, 0.325155400571825, 3.29802486918288, 4.76912826669582, 2.8726142700713, 4.60731046578359, 4.43142878290656, 0.16599519498687, 4.97133206466733, 0.873701166879113, 0.826052507566032)</span></span>
+<span><span class="co">#&gt; z = 1.2207, n = 500, p-value = 0.2952</span></span>
+<span><span class="co">#&gt; alternative hypothesis: the distribution is unimodal and non-uniform</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span>, alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/stat_circular_test.html">stat_circular_test</a></span><span class="op">(</span>test <span class="op">=</span> <span class="st">"rayleigh"</span>, y <span class="op">=</span> <span class="fl">1.1</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="compass-display">Compass display<a class="anchor" aria-label="anchor" href="#compass-display"></a>
+</h2>
+<p>For bearing-like data, compass labels and geographic orientation are
+usually easier to read.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_compass</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span>zero <span class="op">=</span> <span class="st">"north"</span>, direction <span class="op">=</span> <span class="st">"clockwise"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_circular.html">theme_compass</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggcircular_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672"></p>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672"></p>
 </div>
 <div class="section level2">
-<h2 id="go-further">Go further<a class="anchor" aria-label="anchor" href="#go-further"></a>
+<h2 id="axial-data">Axial data<a class="anchor" aria-label="anchor" href="#axial-data"></a>
 </h2>
-<p>The remaining vignettes focus on rose diagrams, circular density
-estimation, mean directions, axial data, movement data and theoretical
-circular distributions.</p>
+<p>Set <code>axial = TRUE</code> when orientations are modulo
+<code>pi</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">axial_orientations</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/circular_summary.html">circular_summary</a></span><span class="op">(</span><span class="va">orientation</span>, axial <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 8</span></span></span>
+<span><span class="co">#&gt;   group     n  mean     R  Rbar variance    sd kappa</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> A       107 0.370 100.0 0.935   0.065<span style="text-decoration: underline;">5</span> 0.368  7.91</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> B       108 1.02  100.  0.928   0.071<span style="text-decoration: underline;">8</span> 0.386  7.24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> C        85 1.25   77.7 0.915   0.085<span style="text-decoration: underline;">5</span> 0.423  6.13</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">axial_orientations</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orientation</span>, fill <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">18</span>, axial <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>axial <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">pi</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="movement-data">Movement data<a class="anchor" aria-label="anchor" href="#movement-data"></a>
+</h2>
+<p>Movement tracks naturally produce step lengths, bearings and turn
+angles.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">animal_steps</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    mean_step <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">step_length</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    median_step <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">step_length</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
+<span><span class="co">#&gt;   state       mean_step median_step</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> directed        3.30        3.23 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> encamped        0.471       0.382</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> exploratory     1.35        1.20</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">animal_steps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, group <span class="op">=</span> <span class="va">id</span>, colour <span class="op">=</span> <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_path</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-21-1.png" alt="" width="672"></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_state_angles.html">plot_state_angles</a></span><span class="op">(</span><span class="va">animal_steps</span>, angle <span class="op">=</span> <span class="va">turn_angle</span>, state <span class="op">=</span> <span class="va">state</span>, type <span class="op">=</span> <span class="st">"rose"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 280 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_rose()`).</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-22-1.png" alt="" width="672"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_state_angles.html">plot_state_angles</a></span><span class="op">(</span><span class="va">animal_steps</span>, angle <span class="op">=</span> <span class="va">turn_angle</span>, state <span class="op">=</span> <span class="va">state</span>, type <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 280 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_circular_density()`).</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-23-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="mixtures-of-von-mises-distributions">Mixtures of von Mises distributions<a class="anchor" aria-label="anchor" href="#mixtures-of-von-mises-distributions"></a>
+</h2>
+<p>Mixtures provide a descriptive way to represent multimodal circular
+distributions.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_vonmises_mixture.html">fit_vonmises_mixture</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span>, k <span class="op">=</span> <span class="fl">2</span>, max_iter <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/augment_circular.html">tidy_circular</a></span><span class="op">(</span><span class="va">fit_mix</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
+<span><span class="co">#&gt;   component proportion    mu kappa</span></span>
+<span><span class="co">#&gt;       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>         1      0.385 0.883 1.17 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>         2      0.615 4.04  0.863</span></span>
+<span><span class="fu"><a href="../reference/augment_circular.html">glance_circular</a></span><span class="op">(</span><span class="va">fit_mix</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
+<span><span class="co">#&gt;       n components logLik   AIC   BIC iterations converged axial</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>   500          2  -<span style="color: #BB0000;">912.</span> <span style="text-decoration: underline;">1</span>834. <span style="text-decoration: underline;">1</span>855.        100 FALSE     FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/stat_vonmises_mixture.html">stat_vonmises_mixture</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">fit_mix</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-25-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="angular-model-diagnostics">Angular model diagnostics<a class="anchor" aria-label="anchor" href="#angular-model-diagnostics"></a>
+</h2>
+<p>When the optional <code>CircularRegression</code> package is
+installed, <code>ggcircular</code> provides basic methods for model
+summaries and residual diagnostics.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"CircularRegression"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">CircularRegression</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CircularRegression/man/consensus.html" class="external-link">consensus</a></span><span class="op">(</span><span class="va">direction</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">wind_directions</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="../reference/augment_circular.html">tidy_circular</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/augment_circular.html">glance_circular</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/circular_model_diagnostics.html">circular_model_diagnostics</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
+<span><span class="co">#&gt;   model_class     n residual_mean residual_Rbar residual_variance</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> consensus     500          1.08        0.036<span style="text-decoration: underline;">1</span>             0.964</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: max_abs_residual &lt;dbl&gt;</span></span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"CircularRegression"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"residuals_density"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-27-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="circular-posterior-draws">Circular posterior draws<a class="anchor" aria-label="anchor" href="#circular-posterior-draws"></a>
+</h2>
+<p>When the optional <code>posterior</code> package is installed,
+circular posterior draws can be converted to a long format and
+summarized with circular statistics.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"posterior"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="va">draws</span> <span class="op">&lt;-</span> <span class="fu">posterior</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/posterior/reference/draws_df.html" class="external-link">draws_df</a></span><span class="op">(</span></span>
+<span>    theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">400</span>, mean <span class="op">=</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span>,</span>
+<span>    phi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">400</span>, mean <span class="op">=</span> <span class="va">pi</span>, sd <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">circular_draws</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_circular_draws.html">as_circular_draws</a></span><span class="op">(</span><span class="va">draws</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"theta"</span>, <span class="st">"phi"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/summarise_circular_draws.html">summarise_circular_draws</a></span><span class="op">(</span><span class="va">circular_draws</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
+<span><span class="co">#&gt;   .variable     n  mean  Rbar lower upper level</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> phi         400  3.12 0.931 2.37   3.83  0.95</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> theta       400  1.06 0.971 0.567  1.52  0.95</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"posterior"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/autoplot_circular_draws.html">autoplot_circular_draws</a></span><span class="op">(</span><span class="va">circular_draws</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="ggcircular_files/figure-html/unnamed-chunk-29-1.png" alt="" width="672"></p>
+</div>
+<div class="section level2">
+<h2 id="common-interpretation-pitfalls">Common interpretation pitfalls<a class="anchor" aria-label="anchor" href="#common-interpretation-pitfalls"></a>
+</h2>
+<p>Circular graphics are descriptive and should be read with the
+data-generating context in mind.</p>
+<ol style="list-style-type: decimal">
+<li>A rose diagram can change visually with the number of bins.</li>
+<li>A circular mean is unstable when <code>Rbar</code> is close to
+zero.</li>
+<li>Directional and axial data require different summaries.</li>
+<li>Compass bearings and mathematical angles use different zero
+directions.</li>
+<li>Multimodal data should not be summarized only by one mean
+direction.</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
+</h2>
+<p>The focused vignettes go deeper into rose diagrams, circular density,
+mean direction, axial data, movement data, theoretical distributions,
+angular model diagnostics, and spherical or posterior workflows.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -11,38 +11,108 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 5)
 ```
 
-# Why circular data are different
+# Overview
 
-Circular observations live on a periodic scale. In radians, `0` and `2 * pi`
-represent the same direction. A linear histogram or arithmetic mean can be
-misleading when observations concentrate near the boundary.
-
-# Directional versus axial data
-
-Directional data have an arrow: north and south are different directions.
-Axial data have an orientation but no arrow: an angle and the angle plus `pi`
-are equivalent. `ggcircular` exposes an `axial = TRUE` argument in the core
-statistics and geoms. Internally, the usual calculation doubles the angles,
-computes directional summaries, then divides the resulting angle by two.
-
-# Why a standard histogram is not enough
-
-The first and last bins of a circular histogram are adjacent on the circle. A
-rose diagram respects this topology when combined with a polar coordinate
-system.
-
-# The ggplot2 logic
-
-`ggcircular` layers are ordinary `ggplot2` layers. They can be added to plots,
-faceted, grouped and combined with familiar scales and themes.
+`ggcircular` extends `ggplot2` for circular, axial and directional data. This
+vignette gives a complete first tour of the package: angle conventions, rose
+diagrams, circular densities, mean directions, uncertainty, axial data, movement
+data, mixtures of von Mises distributions and model diagnostics.
 
 ```{r}
 library(ggplot2)
+library(dplyr)
 library(ggcircular)
 ```
 
+# Why circular data are different
+
+Circular observations live on a periodic scale. In radians, `0` and `2 * pi`
+represent the same direction. This means that linear tools can fail near the
+boundary.
+
+```{r}
+boundary_angles <- tibble(
+  theta = c(0.05, 0.10, 2 * pi - 0.10, 2 * pi - 0.05)
+)
+
+boundary_angles |>
+  summarise(
+    arithmetic_mean = mean(theta),
+    circular_mean = mean_direction(theta),
+    Rbar = mean_resultant_length(theta)
+  )
+```
+
+The arithmetic mean is near `pi`, even though the observations are concentrated
+near zero. The circular mean uses sine and cosine components, so it respects the
+periodic scale.
+
+# Data included in the package
+
+The package ships with four simulated datasets. They are small enough for
+examples and large enough to show realistic grouped workflows.
+
+```{r}
+glimpse(wind_directions)
+glimpse(animal_steps)
+glimpse(hourly_activity)
+glimpse(axial_orientations)
+```
+
+```{r}
+wind_directions |>
+  count(season, station)
+```
+
+# Directional versus axial data
+
+Directional data have an arrow. For example, a bearing of north and a bearing of
+south are different directions. Axial data have an orientation but no arrow, so
+an angle and the angle plus `pi` are equivalent.
+
+```{r}
+directional <- c(0, pi)
+axial <- c(0, pi)
+
+tibble(
+  case = c("directional", "axial"),
+  Rbar = c(
+    mean_resultant_length(directional),
+    mean_resultant_length(axial, axial = TRUE)
+  ),
+  mean = c(
+    mean_direction(directional),
+    mean_direction(axial, axial = TRUE)
+  )
+)
+```
+
+For axial calculations, `ggcircular` doubles the angles internally, computes the
+directional statistic, then transforms the answer back to the original scale.
+
+# Angle conventions
+
+The internal default unit is radians. Helpers are provided for degrees, hours
+and compass labels.
+
+```{r}
+tibble(
+  degrees = c(0, 90, 180, 270),
+  radians = deg_to_rad(degrees),
+  hours = rad_to_hour(radians),
+  compass = rad_to_compass(radians)
+)
+```
+
+Compass labels use the bearing convention: zero points north and angles increase
+clockwise. Use this with `coord_circular(zero = "north", direction =
+"clockwise")`.
+
 # First rose diagram
 
+A rose diagram is a circular histogram. The first and last bins are adjacent on
+the circle.
+
 ```{r}
 ggplot(wind_directions, aes(x = direction)) +
   geom_rose(bins = 16) +
@@ -51,34 +121,243 @@ ggplot(wind_directions, aes(x = direction)) +
   theme_circular()
 ```
 
-# Add density and mean
+# Counts, densities and proportions
+
+`geom_rose()` exposes computed variables such as `count`, `density` and
+`proportion`. These are available with `after_stat()`.
 
 ```{r}
 ggplot(wind_directions, aes(x = direction)) +
-  geom_rose(aes(y = after_stat(density)), bins = 24, alpha = 0.4) +
+  geom_rose(
+    aes(fill = after_stat(proportion)),
+    bins = 16,
+    normalize = "proportion"
+  ) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_rose()
+```
+
+# Groups and facets
+
+Because the layers follow the `ggplot2` grammar, standard grouping, colouring
+and faceting workflows work naturally.
+
+```{r}
+ggplot(wind_directions, aes(x = direction, fill = season)) +
+  geom_rose(bins = 16, alpha = 0.75) +
+  facet_wrap(~ season) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Circular density
+
+`geom_circular_density()` estimates a smooth density on the circle using a von
+Mises kernel. The estimate wraps around the origin.
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(aes(y = after_stat(density)), bins = 24, alpha = 0.35) +
   geom_circular_density(linewidth = 1) +
-  geom_mean_direction() +
   scale_x_circular_degrees() +
   coord_circular() +
   theme_circular()
 ```
 
-# Choose units
-
-The package includes x scales for radians, degrees, hours and compass labels.
-Compass labels are intended for use with `coord_circular(zero = "north",
-direction = "clockwise")`.
+The bandwidth can be adjusted. Smaller values show more local variation.
 
 ```{r}
 ggplot(wind_directions, aes(x = direction)) +
-  geom_rose(bins = 16) +
+  geom_circular_density(bw = 0.25, linewidth = 1) +
+  geom_circular_density(bw = 0.75, linetype = 2) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Mean direction and resultant length
+
+The mean resultant length `Rbar` measures concentration. Values close to one
+indicate strong concentration; values close to zero indicate weak or cancelling
+directionality.
+
+```{r}
+wind_directions |>
+  group_by(season) |>
+  circular_summary(direction)
+```
+
+```{r}
+ggplot(wind_directions, aes(x = direction, colour = season)) +
+  geom_circular_density(linewidth = 1) +
+  geom_mean_direction(length = "resultant") +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Uncertainty and circular tests
+
+`circular_mean_ci()` computes large-sample or bootstrap intervals for the mean
+direction. `rayleigh_test()` provides a basic test against circular uniformity.
+
+```{r}
+circular_mean_ci(wind_directions$direction, method = "large_sample")
+rayleigh_test(wind_directions$direction)
+```
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(bins = 16, alpha = 0.8) +
+  stat_circular_test(test = "rayleigh", y = 1.1, size = 3) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Compass display
+
+For bearing-like data, compass labels and geographic orientation are usually
+easier to read.
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(bins = 16, aes(fill = after_stat(count))) +
+  geom_mean_direction() +
   scale_x_circular_compass() +
   coord_circular(zero = "north", direction = "clockwise") +
   theme_compass()
 ```
 
-# Go further
+# Axial data
 
-The remaining vignettes focus on rose diagrams, circular density estimation,
-mean directions, axial data, movement data and theoretical circular
+Set `axial = TRUE` when orientations are modulo `pi`.
+
+```{r}
+axial_orientations |>
+  group_by(group) |>
+  circular_summary(orientation, axial = TRUE)
+```
+
+```{r}
+ggplot(axial_orientations, aes(x = orientation, fill = group)) +
+  geom_rose(bins = 18, axial = TRUE, alpha = 0.7) +
+  geom_mean_direction(axial = TRUE) +
+  scale_x_circular_degrees(limits = c(0, pi)) +
+  coord_circular() +
+  theme_circular()
+```
+
+# Movement data
+
+Movement tracks naturally produce step lengths, bearings and turn angles.
+
+```{r}
+animal_steps |>
+  group_by(state) |>
+  summarise(
+    mean_step = mean(step_length, na.rm = TRUE),
+    median_step = median(step_length, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+```{r}
+ggplot(animal_steps, aes(x = x, y = y, group = id, colour = id)) +
+  geom_path(alpha = 0.7) +
+  coord_equal() +
+  theme_minimal()
+```
+
+```{r}
+plot_state_angles(animal_steps, angle = turn_angle, state = state, type = "rose")
+```
+
+```{r}
+plot_state_angles(animal_steps, angle = turn_angle, state = state, type = "density")
+```
+
+# Mixtures of von Mises distributions
+
+Mixtures provide a descriptive way to represent multimodal circular
 distributions.
+
+```{r}
+fit_mix <- fit_vonmises_mixture(wind_directions$direction, k = 2, max_iter = 100)
+
+tidy_circular(fit_mix)
+glance_circular(fit_mix)
+```
+
+```{r}
+ggplot(wind_directions, aes(x = direction)) +
+  geom_rose(aes(y = after_stat(density)), bins = 24, alpha = 0.35) +
+  stat_vonmises_mixture(fit = fit_mix, linewidth = 1) +
+  scale_x_circular_degrees() +
+  coord_circular() +
+  theme_circular()
+```
+
+# Angular model diagnostics
+
+When the optional `CircularRegression` package is installed, `ggcircular`
+provides basic methods for model summaries and residual diagnostics.
+
+```{r}
+if (requireNamespace("CircularRegression", quietly = TRUE)) {
+  fit <- CircularRegression::consensus(direction ~ speed, data = wind_directions)
+
+  tidy_circular(fit)
+  glance_circular(fit)
+  circular_model_diagnostics(fit)
+}
+```
+
+```{r}
+if (requireNamespace("CircularRegression", quietly = TRUE)) {
+  autoplot(fit, type = "residuals_density")
+}
+```
+
+# Circular posterior draws
+
+When the optional `posterior` package is installed, circular posterior draws can
+be converted to a long format and summarized with circular statistics.
+
+```{r}
+if (requireNamespace("posterior", quietly = TRUE)) {
+  set.seed(1)
+  draws <- posterior::draws_df(
+    theta = rnorm(400, mean = pi / 3, sd = 0.25),
+    phi = rnorm(400, mean = pi, sd = 0.35)
+  )
+
+  circular_draws <- as_circular_draws(draws, variables = c("theta", "phi"))
+  summarise_circular_draws(circular_draws)
+}
+```
+
+```{r}
+if (requireNamespace("posterior", quietly = TRUE)) {
+  autoplot_circular_draws(circular_draws)
+}
+```
+
+# Common interpretation pitfalls
+
+Circular graphics are descriptive and should be read with the data-generating
+context in mind.
+
+1. A rose diagram can change visually with the number of bins.
+2. A circular mean is unstable when `Rbar` is close to zero.
+3. Directional and axial data require different summaries.
+4. Compass bearings and mathematical angles use different zero directions.
+5. Multimodal data should not be summarized only by one mean direction.
+
+# Next steps
+
+The focused vignettes go deeper into rose diagrams, circular density, mean
+direction, axial data, movement data, theoretical distributions, angular model
+diagnostics, and spherical or posterior workflows.
