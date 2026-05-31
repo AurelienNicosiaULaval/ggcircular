@@ -24,7 +24,11 @@ normalize_angle <- function(x, period = 2 * pi, origin = 0) {
     rlang::abort("`origin` must be a single non-missing number.")
   }
 
-  ((x - origin) %% period) + origin
+  out <- ((x - origin) %% period) + origin
+  tol <- 100 * .Machine$double.eps * max(1, abs(period), abs(origin))
+  out[!is.na(out) & abs(out - (origin + period)) <= tol] <- origin
+  out[!is.na(out) & abs(out - origin) <= tol] <- origin
+  out
 }
 
 #' Signed angular difference
