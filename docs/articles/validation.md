@@ -118,10 +118,11 @@ tidy_circular(mixture_fit)
 #> 1         1      0.500 0.800  27.0
 #> 2         2      0.500 3.94   16.8
 glance_circular(mixture_fit)
-#> # A tibble: 1 × 8
-#>       n components logLik   AIC   BIC iterations converged axial
-#>   <int>      <int>  <dbl> <dbl> <dbl>      <int> <lgl>     <lgl>
-#> 1   500          2  -297.  605.  626.          4 TRUE      FALSE
+#> # A tibble: 1 × 12
+#>       n components logLik   AIC   BIC iterations converged nstart start_id
+#>   <int>      <int>  <dbl> <dbl> <dbl>      <int> <lgl>      <int>    <int>
+#> 1   500          2  -297.  605.  626.          4 TRUE           1        1
+#> # ℹ 3 more variables: empty_components <int>, kappa_max <dbl>, axial <lgl>
 ```
 
 ``` r

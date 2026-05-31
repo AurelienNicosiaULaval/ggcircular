@@ -28,5 +28,7 @@
   draws](https://aureliennicosiaulaval.github.io/ggcircular/articles/spherical-and-posterior.md):
 - [Validation
   examples](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation.md):
+- [Comparative validation
+  notes](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation-comparative.md):
 - [Visualizing Circular and Directional Data with
   ggcircular](https://aureliennicosiaulaval.github.io/ggcircular/articles/article-demonstration.md):

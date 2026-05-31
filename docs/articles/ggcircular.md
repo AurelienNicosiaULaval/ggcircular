@@ -8,6 +8,12 @@ conventions, rose diagrams, circular densities, mean directions,
 uncertainty, axial data, movement data, mixtures of von Mises
 distributions and model diagnostics.
 
+## Not on CRAN yet
+
+`ggcircular` is not on CRAN yet. The package is being stabilized for a
+first CRAN submission; install the development version from GitHub for
+now.
+
 ``` r
 
 library(ggplot2)
@@ -151,7 +157,7 @@ For axial calculations, `ggcircular` doubles the angles internally,
 computes the directional statistic, then transforms the answer back to
 the original scale.
 
-## Angle conventions
+## Conventions for directions and bearings
 
 The internal default unit is radians. Helpers are provided for degrees,
 hours and compass labels.
@@ -176,6 +182,11 @@ tibble(
 Compass labels use the bearing convention: zero points north and angles
 increase clockwise. Use this with
 `coord_circular(zero = "north", direction = "clockwise")`.
+
+For mathematical plots, the default coordinate convention is zero at
+east and positive angles rotating counterclockwise. For axial data, set
+`axial = TRUE` because `theta` and `theta + pi` represent the same
+orientation.
 
 ## First rose diagram
 
@@ -430,23 +441,35 @@ plot_state_angles(animal_steps, angle = turn_angle, state = state, type = "densi
 ## Mixtures of von Mises distributions
 
 Mixtures provide a descriptive way to represent multimodal circular
-distributions.
+distributions. The EM fit can depend on initialization, so use `seed`,
+`nstart` and
+[`glance_circular()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/augment_circular.md)
+when reproducibility or convergence matters.
 
 ``` r
 
-fit_mix <- fit_vonmises_mixture(wind_directions$direction, k = 2, max_iter = 100)
+fit_mix <- fit_vonmises_mixture(
+  wind_directions$direction,
+  k = 2,
+  nstart = 3,
+  seed = 2026,
+  max_iter = 200
+)
+#> Warning: `fit_vonmises_mixture()` did not converge within `max_iter`
+#> iterations.
 
 tidy_circular(fit_mix)
 #> # A tibble: 2 × 4
 #>   component proportion    mu kappa
 #>       <int>      <dbl> <dbl> <dbl>
-#> 1         1      0.385 0.883 1.17 
-#> 2         2      0.615 4.04  0.863
+#> 1         1      0.321 0.903 1.49 
+#> 2         2      0.679 4.06  0.755
 glance_circular(fit_mix)
-#> # A tibble: 1 × 8
-#>       n components logLik   AIC   BIC iterations converged axial
-#>   <int>      <int>  <dbl> <dbl> <dbl>      <int> <lgl>     <lgl>
-#> 1   500          2  -912. 1834. 1855.        100 FALSE     FALSE
+#> # A tibble: 1 × 12
+#>       n components logLik   AIC   BIC iterations converged nstart start_id
+#>   <int>      <int>  <dbl> <dbl> <dbl>      <int> <lgl>      <int>    <int>
+#> 1   500          2  -912. 1833. 1854.        200 FALSE          3        1
+#> # ℹ 3 more variables: empty_components <int>, kappa_max <dbl>, axial <lgl>
 ```
 
 ``` r
@@ -519,7 +542,15 @@ if (requireNamespace("posterior", quietly = TRUE)) {
 
 ![](ggcircular_files/figure-html/unnamed-chunk-29-1.png)
 
-## Common interpretation pitfalls
+## Experimental features
+
+The optional model integrations are experimental. They are intended to
+make diagnostics easier for workflows built with `CircularRegression`,
+`momentuHMM` and `posterior`, while keeping those packages in
+`Suggests`. The functions give explicit errors when an optional package
+is required but not installed.
+
+## Statistical limitations
 
 Circular graphics are descriptive and should be read with the
 data-generating context in mind.
@@ -530,6 +561,11 @@ data-generating context in mind.
 4.  Compass bearings and mathematical angles use different zero
     directions.
 5.  Multimodal data should not be summarized only by one mean direction.
+6.  The automatic circular density bandwidth is a heuristic.
+7.  [`estimate_kappa()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/estimate_kappa.md)
+    is a descriptive approximation, not a full uncertainty analysis.
+8.  Rayleigh and Watson-Williams tests have classical assumptions that
+    should be checked before confirmatory use.
 
 ## Next steps
 

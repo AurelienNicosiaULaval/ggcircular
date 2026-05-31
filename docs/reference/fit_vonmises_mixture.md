@@ -13,9 +13,14 @@ fit_vonmises_mixture(
   weights = NULL,
   axial = FALSE,
   init = c("kmeans", "spaced"),
+  nstart = 1,
+  init_params = NULL,
+  kappa_max = 10000,
+  min_component_weight = 1e-08,
   max_iter = 200,
   tol = 1e-08,
-  na.rm = TRUE
+  na.rm = TRUE,
+  seed = NULL
 )
 ```
 
@@ -41,6 +46,24 @@ fit_vonmises_mixture(
 
   Initialization method, either `"kmeans"` or `"spaced"`.
 
+- nstart:
+
+  Number of EM starts. The fit with the largest log-likelihood is
+  retained.
+
+- init_params:
+
+  Optional list or data frame with initial `proportions`, `mu` and
+  `kappa` values.
+
+- kappa_max:
+
+  Maximum fitted concentration. This caps nearly degenerate components.
+
+- min_component_weight:
+
+  Minimum relative component weight before a component is reinitialized.
+
 - max_iter:
 
   Maximum number of EM iterations.
@@ -52,6 +75,10 @@ fit_vonmises_mixture(
 - na.rm:
 
   Should missing values be removed?
+
+- seed:
+
+  Optional random seed used for initialization.
 
 ## Value
 
@@ -68,10 +95,11 @@ Other circular distributions:
 
 ``` r
 fit <- fit_vonmises_mixture(wind_directions$direction, k = 2)
+#> Warning: `fit_vonmises_mixture()` did not converge within `max_iter` iterations.
 tidy_circular(fit)
 #> # A tibble: 2 × 4
 #>   component proportion    mu kappa
 #>       <int>      <dbl> <dbl> <dbl>
-#> 1         1      0.317 0.904 1.51 
-#> 2         2      0.683 4.06  0.749
+#> 1         1      0.321 0.903 1.49 
+#> 2         2      0.679 4.06  0.755
 ```

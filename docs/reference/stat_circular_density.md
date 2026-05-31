@@ -2,7 +2,10 @@
 
 Estimates a smooth circular density using a von Mises kernel. The
 density wraps around the origin, avoiding the boundary artifacts of a
-linear kernel density estimate.
+linear kernel density estimate. When `bw` is not supplied, the
+concentration is chosen from a simple resultant-length heuristic; it
+should be treated as an exploratory smoothing choice rather than an
+inferential bandwidth selector.
 
 ## Usage
 

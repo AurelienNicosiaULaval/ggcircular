@@ -2,7 +2,8 @@
 
 Estimates the von Mises concentration parameter from the mean resultant
 length using the standard piecewise approximation described by Fisher
-(1993).
+(1993). This is a descriptive approximation and does not apply
+small-sample bias corrections or uncertainty quantification.
 
 ## Usage
 

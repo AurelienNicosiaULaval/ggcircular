@@ -1,7 +1,8 @@
 # Rayleigh test for circular uniformity
 
-Performs the one-sample Rayleigh test for non-uniformity. The returned
-object follows the base `htest` structure.
+Performs the one-sample Rayleigh test for non-uniformity. The test is
+most sensitive to unimodal departures from circular uniformity. The
+returned object follows the base `htest` structure.
 
 ## Usage
 

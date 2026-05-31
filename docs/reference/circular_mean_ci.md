@@ -3,7 +3,9 @@
 Computes an approximate confidence interval for a circular mean. The
 large sample method uses a normal approximation on the mean direction,
 while the bootstrap method resamples angles and forms an interval from
-angular deviations around the sample mean.
+angular deviations around the sample mean. These intervals are
+exploratory; they are not reliable when the mean resultant length is
+close to zero and the mean direction is weakly identified.
 
 ## Usage
 

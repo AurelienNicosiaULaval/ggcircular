@@ -2,7 +2,9 @@
 
 Wrapper around
 [`circular::watson.williams.test()`](https://rdrr.io/pkg/circular/man/watson.williams.test.html)
-with explicit optional dependency handling.
+with explicit optional dependency handling. The Watson-Williams test
+assumes von Mises-like groups with comparable concentrations and should
+be used cautiously for small samples or weakly concentrated data.
 
 ## Usage
 

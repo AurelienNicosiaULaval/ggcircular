@@ -52,18 +52,21 @@ if (requireNamespace("CircularRegression", quietly = TRUE)) {
 ``` r
 
 fit_mix <- fit_vonmises_mixture(wind_directions$direction, k = 2)
+#> Warning: `fit_vonmises_mixture()` did not converge within `max_iter`
+#> iterations.
 
 tidy_circular(fit_mix)
 #> # A tibble: 2 × 4
 #>   component proportion    mu kappa
 #>       <int>      <dbl> <dbl> <dbl>
-#> 1         1      0.317 0.904 1.51 
-#> 2         2      0.683 4.06  0.749
+#> 1         1      0.321 0.903 1.49 
+#> 2         2      0.679 4.06  0.755
 glance_circular(fit_mix)
-#> # A tibble: 1 × 8
-#>       n components logLik   AIC   BIC iterations converged axial
-#>   <int>      <int>  <dbl> <dbl> <dbl>      <int> <lgl>     <lgl>
-#> 1   500          2  -912. 1833. 1854.        200 FALSE     FALSE
+#> # A tibble: 1 × 12
+#>       n components logLik   AIC   BIC iterations converged nstart start_id
+#>   <int>      <int>  <dbl> <dbl> <dbl>      <int> <lgl>      <int>    <int>
+#> 1   500          2  -912. 1833. 1854.        200 FALSE          1        1
+#> # ℹ 3 more variables: empty_components <int>, kappa_max <dbl>, axial <lgl>
 ```
 
 ``` r
