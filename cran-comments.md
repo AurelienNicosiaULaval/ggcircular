@@ -2,6 +2,15 @@
 
 0 errors | 0 warnings | 0 notes
 
+## Resubmission
+
+This is a resubmission. In this version I have:
+
+* single quoted the software name 'ggplot2' in the Title and Description
+  fields of DESCRIPTION;
+* replaced local README links to CONTRIBUTING.md, SUPPORT.md and
+  CODE_OF_CONDUCT.md with absolute GitHub URLs.
+
 Checked locally on macOS 26.5 with R 4.5.0 using:
 
 ```r

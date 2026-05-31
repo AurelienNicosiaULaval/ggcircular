@@ -319,9 +319,11 @@ Then see the pkgdown articles:
 ## Contributing and Support
 
 Contributions are welcome through focused GitHub issues and pull requests. See
-[`CONTRIBUTING.md`](CONTRIBUTING.md), [`SUPPORT.md`](SUPPORT.md) and
-[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for contribution, support and conduct
-guidelines.
+[`CONTRIBUTING.md`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/CONTRIBUTING.md),
+[`SUPPORT.md`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/SUPPORT.md)
+and
+[`CODE_OF_CONDUCT.md`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/CODE_OF_CONDUCT.md)
+for contribution, support and conduct guidelines.
 
 ## Development Status
 
