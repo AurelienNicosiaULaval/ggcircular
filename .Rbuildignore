@@ -1,4 +1,5 @@
 ^_pkgdown\.yml$
+^pkgdown$
 ^\.github$
 ^README\.Rmd$
 ^TODO\.md$

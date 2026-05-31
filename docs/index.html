@@ -6,13 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>A ggplot2 Extension for Circular and Directional Data • ggcircular</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A ggplot2 Extension for Circular and Directional Data">
 <meta name="description" content="Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions and movement data visualizations.">
 <meta property="og:description" content="Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions and movement data visualizations.">
+<meta property="og:image" content="https://aureliennicosiaulaval.github.io/ggcircular/logo.svg">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -48,118 +54,314 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="ggcircular">ggcircular<a class="anchor" aria-label="anchor" href="#ggcircular"></a>
-</h1></div>
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></p>
-<p><code>ggcircular</code> is a <code>ggplot2</code> extension for circular, axial and directional data. It provides rose diagrams, circular density estimates, mean direction layers, circular scales, movement helpers and simulated datasets for examples and teaching.</p>
+  <main id="main" class="col-md-9"><p><img src="reference/figures/logo.png" align="right" width="170" alt="ggcircular hex logo"></p>
+<div class="section level1">
+<div class="page-header">
+<img src="logo.svg" class="logo" alt=""><h1 id="ggcircular">ggcircular<a class="anchor" aria-label="anchor" href="#ggcircular"></a>
+</h1>
+</div>
+<p><a href="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/AurelienNicosiaULaval/ggcircular/releases" class="external-link"><img src="https://img.shields.io/github/v/release/AurelienNicosiaULaval/ggcircular?label=release" alt="GitHub release"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a> <a href="DESCRIPTION"><img src="https://img.shields.io/badge/R-%3E%3D%204.1.0-276DC3.svg" alt="R &gt;= 4.1.0"></a> <a href="https://aureliennicosiaulaval.github.io/ggcircular/"><img src="https://img.shields.io/badge/docs-pkgdown-1f425f.svg" alt="pkgdown site"></a></p>
+<p><code>ggcircular</code> is a <code>ggplot2</code> extension for circular, axial and directional data. It provides layers, scales, coordinate helpers, summaries and diagnostics for angles measured on a periodic scale.</p>
+<p>The package is designed for exploratory graphics, teaching examples and reproducible statistical workflows involving directions, bearings, orientations, times of day, turn angles and other circular measurements.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>Install the development release from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AurelienNicosiaULaval/ggcircular"</span><span class="op">)</span></span></code></pre></div>
+<p>Or clone with SSH and install locally:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:AurelienNicosiaULaval/ggcircular.git</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="bu">cd</span> ggcircular</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">R</span> <span class="at">-q</span> <span class="at">-e</span> <span class="st">'devtools::install(upgrade = "never")'</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="minimal-example">Minimal example<a class="anchor" aria-label="anchor" href="#minimal-example"></a>
-</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AurelienNicosiaULaval/ggcircular" class="external-link">ggcircular</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_compass</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span>zero <span class="op">=</span> <span class="st">"north"</span>, direction <span class="op">=</span> <span class="st">"clockwise"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="rose-diagram">Rose diagram<a class="anchor" aria-label="anchor" href="#rose-diagram"></a>
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">16</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/theme_circular.html">theme_rose</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="circular-density">Circular density<a class="anchor" aria-label="anchor" href="#circular-density"></a>
-</h2>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AurelienNicosiaULaval/ggcircular" class="external-link">ggcircular</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.45</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">wind_directions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">season</span> <span class="op">==</span> <span class="st">"winter"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span>, fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.78</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.1</span>, colour <span class="op">=</span> <span class="st">"#123C4A"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"resultant"</span>, colour <span class="op">=</span> <span class="st">"#E4572E"</span>, linewidth <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_compass</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span>zero <span class="op">=</span> <span class="st">"north"</span>, direction <span class="op">=</span> <span class="st">"clockwise"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"density"</span>, title <span class="op">=</span> <span class="st">"Winter wind directions"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-quick-start-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="mean-direction">Mean direction<a class="anchor" aria-label="anchor" href="#mean-direction"></a>
+<h2 id="what-it-does">What It Does<a class="anchor" aria-label="anchor" href="#what-it-does"></a>
 </h2>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Workflow</th>
+<th>Main helpers</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Rose diagrams and circular histograms</td>
+<td>
+<code><a href="reference/geom_rose.html">geom_rose()</a></code>, <code><a href="reference/stat_rose.html">stat_rose()</a></code>
+</td>
+</tr>
+<tr>
+<td>Circular density estimation</td>
+<td>
+<code><a href="reference/geom_circular_density.html">geom_circular_density()</a></code>, <code><a href="reference/stat_circular_density.html">stat_circular_density()</a></code>
+</td>
+</tr>
+<tr>
+<td>Mean direction and concentration</td>
+<td>
+<code><a href="reference/geom_mean_direction.html">geom_mean_direction()</a></code>, <code><a href="reference/circular_summary.html">circular_summary()</a></code>, <code><a href="reference/estimate_kappa.html">estimate_kappa()</a></code>
+</td>
+</tr>
+<tr>
+<td>Circular confidence intervals and tests</td>
+<td>
+<code><a href="reference/circular_mean_ci.html">circular_mean_ci()</a></code>, <code><a href="reference/rayleigh_test.html">rayleigh_test()</a></code>, <code><a href="reference/watson_williams_test.html">watson_williams_test()</a></code>, <code><a href="reference/stat_circular_test.html">stat_circular_test()</a></code>
+</td>
+</tr>
+<tr>
+<td>Axial orientations modulo pi</td>
+<td>
+<code>axial = TRUE</code> in summaries and layers</td>
+</tr>
+<tr>
+<td>Theoretical circular distributions</td>
+<td>
+<code><a href="reference/stat_vonmises.html">stat_vonmises()</a></code>, <code><a href="reference/stat_vonmises.html">stat_wrapped_normal()</a></code>, <code><a href="reference/stat_vonmises.html">stat_uniform_circular()</a></code>
+</td>
+</tr>
+<tr>
+<td>Mixtures of von Mises components</td>
+<td>
+<code><a href="reference/fit_vonmises_mixture.html">fit_vonmises_mixture()</a></code>, <code><a href="reference/stat_vonmises_mixture.html">stat_vonmises_mixture()</a></code>
+</td>
+</tr>
+<tr>
+<td>Movement and state-angle graphics</td>
+<td>
+<code><a href="reference/mutate_directional_features.html">mutate_directional_features()</a></code>, <code><a href="reference/geom_direction_arrow.html">geom_direction_arrow()</a></code>, <code><a href="reference/plot_state_angles.html">plot_state_angles()</a></code>
+</td>
+</tr>
+<tr>
+<td>Angular model diagnostics</td>
+<td>
+<code><a href="reference/circular_residuals.html">circular_residuals()</a></code>, <code><a href="reference/circular_model_diagnostics.html">circular_model_diagnostics()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> methods</td>
+</tr>
+<tr>
+<td>Spherical and posterior helpers</td>
+<td>
+<code><a href="reference/spherical_summary.html">spherical_summary()</a></code>, <code><a href="reference/as_circular_draws.html">as_circular_draws()</a></code>, <code><a href="reference/summarise_circular_draws.html">summarise_circular_draws()</a></code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="design-principles">Design Principles<a class="anchor" aria-label="anchor" href="#design-principles"></a>
+</h2>
+<ul>
+<li>Angles are stored and computed in radians.</li>
+<li>Scales handle display labels in radians, degrees, hours or compass labels.</li>
+<li>Directional data use period <code>2 * pi</code>.</li>
+<li>Axial data use period <code>pi</code> through <code>axial = TRUE</code>.</li>
+<li>Heavy packages remain optional and are accessed with explicit availability checks.</li>
+<li>Outputs are standard <code>ggplot</code> objects, tibbles or familiar test objects.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="summaries">Summaries<a class="anchor" aria-label="anchor" href="#summaries"></a>
+</h2>
+<p><code><a href="reference/circular_summary.html">circular_summary()</a></code> respects existing <code>dplyr</code> groups and returns mean direction, resultant length, circular variance, circular standard deviation and an estimated von Mises concentration parameter.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span>, colour <span class="op">=</span> <span class="va">season</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_circular_density.html">geom_circular_density</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>length <span class="op">=</span> <span class="st">"resultant"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">wind_directions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/circular_summary.html">circular_summary</a></span><span class="op">(</span><span class="va">direction</span>, <span class="va">season</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    mean_degrees <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="reference/rad_to_deg.html">rad_to_deg</a></span><span class="op">(</span><span class="va">mean</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    Rbar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Rbar</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>    kappa <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">kappa</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">season</span>, <span class="va">n</span>, <span class="va">mean_degrees</span>, <span class="va">Rbar</span>, <span class="va">kappa</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 5</span></span>
+<span><span class="co">#&gt;   season     n mean_degrees  Rbar kappa</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 fall     131        310.  0.811  3   </span></span>
+<span><span class="co">#&gt; 2 spring   115        135.  0.802  2.89</span></span>
+<span><span class="co">#&gt; 3 summer   138        223.  0.87   4.15</span></span>
+<span><span class="co">#&gt; 4 winter   116         48.2 0.904  5.52</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="movement-data">Movement data<a class="anchor" aria-label="anchor" href="#movement-data"></a>
+<h2 id="axial-data">Axial Data<a class="anchor" aria-label="anchor" href="#axial-data"></a>
 </h2>
+<p>Axial observations identify opposite directions. For example, an orientation of 0 radians is equivalent to an orientation of pi radians. Use <code>axial = TRUE</code> to compute and display these data modulo pi.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">animal_steps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">turn_angle</span>, fill <span class="op">=</span> <span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">24</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">state</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_radians</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="axial-data">Axial data<a class="anchor" aria-label="anchor" href="#axial-data"></a>
-</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">axial_orientations</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orientation</span>, fill <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">18</span>, axial <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>axial <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">18</span>, axial <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.72</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>axial <span class="op">=</span> <span class="cn">TRUE</span>, colour <span class="op">=</span> <span class="st">"#123C4A"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">pi</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">group</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-axial-1.png" alt="" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="angular-model-diagnostics">Angular model diagnostics<a class="anchor" aria-label="anchor" href="#angular-model-diagnostics"></a>
+<h2 id="directional-movement">Directional Movement<a class="anchor" aria-label="anchor" href="#directional-movement"></a>
 </h2>
+<p><code>ggcircular</code> includes helpers for bearings, turn angles and state-specific angular distributions.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">animal_steps</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">turn_angle</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">turn_angle</span>, fill <span class="op">=</span> <span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.72</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"#123C4A"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span></span>
+<span>    breaks <span class="op">=</span> <span class="fu"><a href="reference/deg_to_rad.html">deg_to_rad</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">270</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0"</span>, <span class="st">"90"</span>, <span class="st">"180"</span>, <span class="st">"270"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">state</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-movement-1.png" alt="" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="mixtures-of-von-mises-distributions">Mixtures of von Mises Distributions<a class="anchor" aria-label="anchor" href="#mixtures-of-von-mises-distributions"></a>
+</h2>
+<p>Finite mixtures are fitted with an expectation-maximization routine and can be drawn directly on top of empirical rose diagrams.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"CircularRegression"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">CircularRegression</span><span class="fu">::</span><span class="fu">consensus</span><span class="op">(</span><span class="va">direction</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">wind_directions</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="fu"><a href="reference/circular_model_diagnostics.html">circular_model_diagnostics</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"residuals_density"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="mixtures-of-von-mises-distributions">Mixtures of von Mises distributions<a class="anchor" aria-label="anchor" href="#mixtures-of-von-mises-distributions"></a>
-</h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_vonmises_mixture.html">fit_vonmises_mixture</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">fit_mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_vonmises_mixture.html">fit_vonmises_mixture</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span>, k <span class="op">=</span> <span class="fl">2</span>, init <span class="op">=</span> <span class="st">"spaced"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">wind_directions</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/stat_vonmises_mixture.html">stat_vonmises_mixture</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">fit_mix</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">density</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">24</span>, alpha <span class="op">=</span> <span class="fl">0.42</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/stat_vonmises_mixture.html">stat_vonmises_mixture</a></span><span class="op">(</span>fit <span class="op">=</span> <span class="va">fit_mix</span>, linewidth <span class="op">=</span> <span class="fl">1.2</span>, colour <span class="op">=</span> <span class="st">"#123C4A"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_degrees</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-mixture-1.png" alt="" width="100%"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/augment_circular.html">tidy_circular</a></span><span class="op">(</span><span class="va">fit_mix</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    mu_degrees <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="reference/rad_to_deg.html">rad_to_deg</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    kappa <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">kappa</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    proportion <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">proportion</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">component</span>, <span class="va">proportion</span>, <span class="va">mu_degrees</span>, <span class="va">kappa</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
+<span><span class="co">#&gt;   component proportion mu_degrees kappa</span></span>
+<span><span class="co">#&gt;       &lt;int&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1         1      0.337       51.4  1.4 </span></span>
+<span><span class="co">#&gt; 2         2      0.663      232.   0.78</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="tests-and-intervals">Tests and Intervals<a class="anchor" aria-label="anchor" href="#tests-and-intervals"></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/circular_mean_ci.html">circular_mean_ci</a></span><span class="op">(</span></span>
+<span>  <span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>  R <span class="op">=</span> <span class="fl">399</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">2026</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mean</span>, <span class="va">lower</span>, <span class="va">upper</span><span class="op">)</span>, <span class="va">rad_to_deg</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 7</span></span>
+<span><span class="co">#&gt;    mean lower upper level method        n   Rbar</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  235.  139.  354.  0.95 bootstrap   500 0.0494</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rayleigh</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rayleigh_test.html">rayleigh_test</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">rayleigh</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,</span>
+<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">rayleigh</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span>,</span>
+<span>  p_value <span class="op">=</span> <span class="va">rayleigh</span><span class="op">$</span><span class="va">p.value</span>,</span>
+<span>  method <span class="op">=</span> <span class="va">rayleigh</span><span class="op">$</span><span class="va">method</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span><span class="co">#&gt;   statistic     n p_value method                              </span></span>
+<span><span class="co">#&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                               </span></span>
+<span><span class="co">#&gt; 1      1.22   500   0.295 Rayleigh test of circular uniformity</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="optional-model-integrations">Optional Model Integrations<a class="anchor" aria-label="anchor" href="#optional-model-integrations"></a>
+</h2>
+<p>The package keeps heavier modeling ecosystems in <code>Suggests</code>. When available, these integrations add diagnostics without making them hard dependencies.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">CircularRegression</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CircularRegression/man/consensus.html" class="external-link">consensus</a></span><span class="op">(</span><span class="va">direction</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">wind_directions</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/circular_model_diagnostics.html">circular_model_diagnostics</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"residuals_density"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"fitted_observed"</span><span class="op">)</span></span></code></pre></div>
+<p>Optional helpers currently target:</p>
+<ul>
+<li>
+<code>CircularRegression</code> angular, consensus and two-step objects.</li>
+<li>
+<code>momentuHMM</code> state probabilities and Viterbi states.</li>
+<li>
+<code>posterior</code> draw objects through <code><a href="https://mc-stan.org/posterior/reference/draws_df.html" class="external-link">posterior::as_draws_df()</a></code>.</li>
+<li>
+<code>circular</code> tests when classical circular test implementations are available.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
 </h2>
-<p>Start with <code><a href="articles/ggcircular.html">vignette("ggcircular")</a></code>, then see the specialized vignettes on rose diagrams, circular density, mean direction, axial data, movement data and circular distributions, model diagnostics, spherical helpers and posterior draws.</p>
+<p>Start with:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"ggcircular"</span>, package <span class="op">=</span> <span class="st">"ggcircular"</span><span class="op">)</span></span></code></pre></div>
+<p>Then see the pkgdown articles:</p>
+<ul>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/ggcircular.html">Getting started</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/rose-diagrams.html">Rose diagrams</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-density.html">Circular density</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/mean-direction-and-uncertainty.html">Mean direction and uncertainty</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/axial-data.html">Axial data</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/movement-data.html">Movement data</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-distributions.html">Circular distributions</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/model-diagnostics.html">Model diagnostics</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/spherical-and-posterior.html">Spherical and posterior helpers</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/validation.html">Scientific validation notes</a></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="development-status">Development Status<a class="anchor" aria-label="anchor" href="#development-status"></a>
+</h2>
+<p><code>ggcircular</code> is currently experimental. The public API is usable, tested and documented, but may still evolve as more angular model classes and validation cases are added.</p>
+<p>Current checks:</p>
+<ul>
+<li>Local <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code> passes with 111 tests.</li>
+<li>Local <code>devtools::check(document = FALSE, build_args = "--no-manual")</code> passes with 0 errors, 0 warnings and 0 notes.</li>
+<li>GitHub Actions runs <code>R CMD check</code> on Linux, macOS and Windows.</li>
+<li>
+<code>pkgdown</code> builds and publishes the website from <code>main</code>.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<ul>
+<li>Fisher, N. I. (1993). <a href="https://doi.org/10.1017/CBO9780511564345" class="external-link"><em>Statistical Analysis of Circular Data</em></a>. Cambridge University Press.</li>
+<li>Jammalamadaka, S. R., and Sengupta, A. (2001). <a href="https://doi.org/10.1142/4031" class="external-link"><em>Topics in Circular Statistics</em></a>. World Scientific.</li>
+<li>Pewsey, A., Neuhäuser, M., and Ruxton, G. D. (2013). <a href="https://books.google.com/books/about/Circular_Statistics_in_R.html?id=qeadAAAAQBAJ" class="external-link"><em>Circular Statistics in R</em></a>. Oxford University Press.</li>
+<li>Wickham, H. (2016). <a href="https://doi.org/10.1007/978-3-319-24277-4" class="external-link"><em>ggplot2: Elegant Graphics for Data Analysis</em></a>. Springer.</li>
+</ul>
 </div>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -203,7 +405,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>
