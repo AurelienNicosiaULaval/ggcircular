@@ -372,10 +372,10 @@ Then see the pkgdown articles:
 
 Contributions are welcome through focused GitHub issues and pull
 requests. See
-[`CONTRIBUTING.md`](https://aureliennicosiaulaval.github.io/ggcircular/CONTRIBUTING.md),
-[`SUPPORT.md`](https://aureliennicosiaulaval.github.io/ggcircular/SUPPORT.md)
+[`CONTRIBUTING.md`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/CONTRIBUTING.md),
+[`SUPPORT.md`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/SUPPORT.md)
 and
-[`CODE_OF_CONDUCT.md`](https://aureliennicosiaulaval.github.io/ggcircular/CODE_OF_CONDUCT.md)
+[`CODE_OF_CONDUCT.md`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/CODE_OF_CONDUCT.md)
 for contribution, support and conduct guidelines.
 
 ## Development Status
