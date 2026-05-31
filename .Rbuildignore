@@ -2,6 +2,14 @@
 ^pkgdown$
 ^\.github$
 ^\.git
+^\.DS_Store$
+^\.Rhistory$
+^\.RData$
+^\.Ruserdata$
+^\.Rproj\.user$
+^\.Renviron$
+^.*\.tar\.gz$
+^.*\.Rcheck$
 ^CODE_OF_CONDUCT\.md$
 ^CONTRIBUTING\.md$
 ^README\.Rmd$
