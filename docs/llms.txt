@@ -4,6 +4,8 @@
 
 [![R-CMD-check](https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/pkgdown.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ggcircular)](https://CRAN.R-project.org/package=ggcircular)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![GitHub
@@ -25,12 +27,18 @@ orientations, times of day, turn angles and other circular measurements.
 
 ## Installation
 
-### Not on CRAN yet
+### CRAN
 
-`ggcircular` is not on CRAN yet. Install it from GitHub while the API is
-being stabilized for a first CRAN submission.
+Install the released version from CRAN:
 
-Install the development release from GitHub:
+``` r
+
+install.packages("ggcircular")
+```
+
+### Development version
+
+Install the development version from GitHub:
 
 ``` r
 
@@ -298,8 +306,7 @@ The following pieces are intentionally available but still experimental:
 - spherical summaries and posterior draw helpers.
 
 Experimental functions are documented and tested, but their return
-columns may still be refined before a CRAN release if validation reveals
-a better public contract.
+columns may still evolve as validation reveals better public contracts.
 
 ## Statistical Limitations
 
@@ -318,10 +325,14 @@ does not replace specialist inference workflows for circular statistics.
 - Multimodal data should usually be inspected with density or mixture
   graphics, not summarized only by one mean direction.
 
-## CRAN Readiness
+## CRAN Status
 
-The package is being prepared for a first CRAN submission. The release
-checklist currently includes:
+`ggcircular` is available from CRAN at
+<https://CRAN.R-project.org/package=ggcircular>. The CRAN page lists
+version 0.1.0, published 2026-06-04, source archives, binaries,
+vignettes and check results.
+
+The development workflow continues to include:
 
 - `R CMD check --as-cran` on the final source tarball;
 - `--run-donttest` checks;
@@ -386,9 +397,7 @@ validation cases are added.
 
 Current checks:
 
-- Local
-  [`devtools::test()`](https://devtools.r-lib.org/reference/test.html)
-  passes.
+- Local `devtools::test()` passes.
 - Local
   `devtools::check(document = FALSE, args = "--as-cran", build_args = "--no-manual")`
   is used before release commits.

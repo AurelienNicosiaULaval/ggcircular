@@ -2,6 +2,8 @@
 
 ## ggcircular 0.1.0
 
+CRAN release: 2026-06-04
+
 ### New features
 
 - Added rose diagrams, circular density estimates, mean direction
