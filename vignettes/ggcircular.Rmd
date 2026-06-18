@@ -18,10 +18,10 @@ vignette gives a complete first tour of the package: angle conventions, rose
 diagrams, circular densities, mean directions, uncertainty, axial data, movement
 data, mixtures of von Mises distributions and model diagnostics.
 
-# Not on CRAN yet
+# Installation
 
-`ggcircular` is not on CRAN yet. The package is being stabilized for a first
-CRAN submission; install the development version from GitHub for now.
+Install the released version from CRAN with `install.packages("ggcircular")`.
+Install the development version from GitHub when you need unreleased features.
 
 ```{r}
 library(ggplot2)

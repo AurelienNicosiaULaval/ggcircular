@@ -1,0 +1,60 @@
+---
+title: "Circular-circular workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Circular-circular workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
+```
+
+This vignette shows a basic circular-circular workflow. Both variables are
+angles, so the sample space is a torus.
+
+```{r}
+library(ggplot2)
+library(ggcircular)
+
+dat <- simulate_tor_diagnostic(
+  n = 260,
+  scenario = "diagonal",
+  seed = 2
+)
+```
+
+The toroidal flow displays conditional binned mass between angular sectors.
+The toroidal topography estimates `f(phi | theta)`. The conditional ridge
+extracts a dominant modal relation.
+
+```{r}
+plot_toroidal_flow(dat$theta, dat$phi, n_sectors = 18)
+```
+
+```{r}
+plot_toroidal_topography(dat$theta, dat$phi, n_theta = 50, n_phi = 50, conditional = TRUE)
+```
+
+```{r}
+plot_toroidal_ridge(dat$theta, dat$phi, n_theta = 50, n_phi = 50)
+```
+
+The same displays can be built as `ggplot2` layers.
+
+```{r}
+ggplot(dat, aes(x = theta, y = phi)) +
+  stat_toroidal_topography(n_theta = 50, n_phi = 50, conditional = TRUE) +
+  stat_toroidal_ridge(n_theta = 50, n_phi = 50, linewidth = 1) +
+  coord_equal()
+```
+
+Ridges are most interpretable when a dominant mode is meaningful. For
+bifurcating conditional densities, use the topography as the primary display and
+interpret a single ridge cautiously.
