@@ -20,11 +20,13 @@ site](https://img.shields.io/badge/docs-pkgdown-1f425f.svg)](https://aureliennic
 
 `ggcircular` is a `ggplot2` extension for circular, axial and
 directional data. It provides layers, scales, coordinate helpers,
-summaries and diagnostics for angles measured on a periodic scale.
+summaries, diagnostics and displays for circular-linear and
+circular-circular dependence.
 
 The package is designed for exploratory graphics, teaching examples and
 reproducible statistical workflows involving directions, bearings,
-orientations, times of day, turn angles and other circular measurements.
+orientations, times of day, turn angles, circular-linear relationships
+and other periodic measurements.
 
 ## Installation
 
@@ -90,6 +92,7 @@ wind_directions |>
 | Movement and state-angle graphics | `mutate_directional_features()`, `geom_direction_arrow()`, `plot_state_angles()` |
 | Angular model diagnostics | `circular_residuals()`, `circular_model_diagnostics()`, `autoplot()` methods |
 | Spherical and posterior helpers | `spherical_summary()`, `as_circular_draws()`, `summarise_circular_draws()` |
+| Directional dependence on cylinders and tori | `stat_circular_topography()`, `geom_phase_loom()`, `stat_toroidal_topography()`, `stat_toroidal_ridge()` |
 
 ## Design Principles
 
@@ -137,7 +140,7 @@ wind_directions |>
 #> # A tibble: 4 × 5
 #>   season     n mean_degrees  Rbar kappa
 #>   <chr>  <int>        <dbl> <dbl> <dbl>
-#> 1 fall     131        310.  0.811  3
+#> 1 fall     131        310.  0.811  3   
 #> 2 spring   115        135.  0.802  2.89
 #> 3 summer   138        223.  0.87   4.15
 #> 4 winter   116         48.2 0.904  5.52
@@ -252,8 +255,8 @@ tibble::tibble(
   method = rayleigh$method
 )
 #> # A tibble: 1 × 4
-#>   statistic     n p_value method
-#>       <dbl> <int>   <dbl> <chr>
+#>   statistic     n p_value method                              
+#>       <dbl> <int>   <dbl> <chr>                               
 #> 1      1.22   500   0.295 Rayleigh test of circular uniformity
 ```
 

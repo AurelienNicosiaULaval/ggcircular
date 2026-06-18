@@ -1,3 +1,28 @@
+# ggcircular 0.2.0
+
+## New features
+
+* Integrated the directional-dependence displays prototyped in
+  `ggdirectionalvis` into `ggcircular`.
+* Added circular-linear helpers for density estimation, phase loom displays,
+  circular topographies, statistical orbits and bootstrap orbit intervals.
+* Added circular-circular helpers for toroidal density estimation, toroidal
+  topographies, toroidal flow displays, conditional ridges and bootstrap ridge
+  intervals.
+* Added directional diagnostic scenarios, diagnostic atlases, classical
+  unfolded comparisons, marginal support diagnostics, smoothing selection and
+  independence lineups.
+* Added simulation helpers for cylindrical and toroidal examples.
+
+## API
+
+* The existing public API remains available.
+* New ggplot2 layers use the standard `ggcircular` convention
+  `aes(x = theta, y = response)` or `aes(x = theta, y = phi)`.
+* High-level `plot_*()` helpers are retained as shortcuts built from the new
+  ggplot2 layers.
+* Prototype-only integration stubs are not included.
+
 # ggcircular 0.1.0
 
 ## New features
@@ -37,4 +62,4 @@
 * Advanced model diagnostics, von Mises mixtures and optional ecosystem
   integrations are experimental.
 * Automatic circular-density smoothing is heuristic.
-* CRAN submission is planned after additional validation and dependency checks.
+* Further validation is planned for the R Journal article workflow.

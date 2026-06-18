@@ -30,12 +30,13 @@ knitr::opts_chunk$set(
 [![pkgdown site](https://img.shields.io/badge/docs-pkgdown-1f425f.svg)](https://aureliennicosiaulaval.github.io/ggcircular/)
 
 `ggcircular` is a `ggplot2` extension for circular, axial and directional
-data. It provides layers, scales, coordinate helpers, summaries and diagnostics
-for angles measured on a periodic scale.
+data. It provides layers, scales, coordinate helpers, summaries, diagnostics
+and displays for circular-linear and circular-circular dependence.
 
 The package is designed for exploratory graphics, teaching examples and
 reproducible statistical workflows involving directions, bearings, orientations,
-times of day, turn angles and other circular measurements.
+times of day, turn angles, circular-linear relationships and other periodic
+measurements.
 
 ## Installation
 
@@ -99,6 +100,7 @@ wind_directions |>
 | Movement and state-angle graphics | `mutate_directional_features()`, `geom_direction_arrow()`, `plot_state_angles()` |
 | Angular model diagnostics | `circular_residuals()`, `circular_model_diagnostics()`, `autoplot()` methods |
 | Spherical and posterior helpers | `spherical_summary()`, `as_circular_draws()`, `summarise_circular_draws()` |
+| Directional dependence on cylinders and tori | `stat_circular_topography()`, `geom_phase_loom()`, `stat_toroidal_topography()`, `stat_toroidal_ridge()` |
 
 ## Design Principles
 
