@@ -26,6 +26,14 @@ The package is designed for exploratory graphics, teaching examples and
 reproducible statistical workflows involving directions, bearings,
 orientations, times of day, turn angles and other circular measurements.
 
+## Part of the research ecosystem
+
+This repository is part of Aurélien Nicosia's open research and teaching ecosystem in computational statistics, scientific R software, reproducible data science and statistical education.
+
+* Research Lab: [https://aureliennicosiaulaval.github.io/web_site/research-lab.html](https://aureliennicosiaulaval.github.io/web_site/research-lab.html)
+* GitHub profile: [https://github.com/AurelienNicosiaULaval](https://github.com/AurelienNicosiaULaval)
+* Related projects: [`CircularRegression`](https://github.com/AurelienNicosiaULaval/CircularRegression), [`donnees-bleues`](https://github.com/AurelienNicosiaULaval/donnees-bleues)
+
 ## Installation
 
 ### CRAN
