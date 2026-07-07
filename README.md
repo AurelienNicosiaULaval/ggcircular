@@ -369,6 +369,16 @@ Then see the pkgdown articles:
 - [Comparative
   validation](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation-comparative.html)
 
+## Citation
+
+To cite `ggcircular` from R, use:
+
+``` r
+citation("ggcircular")
+```
+
+Citation metadata is also provided in `inst/CITATION`.
+
 ## Contributing and Support
 
 Contributions are welcome through focused GitHub issues and pull
