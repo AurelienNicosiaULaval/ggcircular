@@ -209,7 +209,7 @@ system.time({
   )$data[[1]]
 })
 #>    user  system elapsed 
-#>   0.039   0.001   0.040
+#>    0.04    0.00    0.04
 
 density_tbl |>
   summarise(n_grid = n(), density_min = min(density), density_max = max(density))
