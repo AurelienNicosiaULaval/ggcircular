@@ -2,11 +2,11 @@ citHeader("To cite ggcircular and related methodological references, use:")
 
 bibentry(
   bibtype = "Manual",
-  title = "ggcircular: A ggplot2 Extension for Circular and Directional Data",
-  author = person("Aurelien", "Nicosia"),
+  title = "ggcircular: A ggplot2 Extension for Circular, Cylindrical and Toroidal Data",
+  author = person("Aurélien", "Nicosia"),
   year = "2026",
-  note = "R package version 0.1.0",
-  url = "https://github.com/AurelienNicosiaULaval/ggcircular"
+  note = "R package version 0.2.0",
+  url = "https://github.com/AurelienNicosiaULaval/ggcircular/releases/tag/v0.2.0"
 )
 
 bibentry(
@@ -29,5 +29,3 @@ bibentry(
   publisher = "World Scientific",
   doi = "10.1142/4031"
 )
-
-citFooter("A Zenodo DOI will be added here after archival release.")

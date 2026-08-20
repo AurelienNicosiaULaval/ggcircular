@@ -1,0 +1,104 @@
+---
+title: "Smoothing and support diagnostics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Smoothing and support diagnostics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
+```
+
+Conditional displays depend on smoothing parameters. This vignette shows how to
+choose them by cross-validated conditional likelihood and how to flag angular
+regions with weak marginal support.
+
+```{r}
+library(ggcircular)
+
+cyl <- simulate_cyl_diagnostic(n = 180, scenario = "heteroscedastic", seed = 3)
+tor <- simulate_tor_diagnostic(n = 200, scenario = "doubling", seed = 4)
+```
+
+For circular-linear data, select both the circular concentration and the linear
+bandwidth.
+
+```{r}
+cyl_smoothing <- select_cyl_smoothing(
+  theta = cyl$theta,
+  x = cyl$x,
+  kappa_values = c(8, 14),
+  h_values = c(0.25, 0.45),
+  n_folds = 3,
+  seed = 5
+)
+
+head(cyl_smoothing)
+```
+
+For circular-circular data, select the conditioning and response concentrations.
+
+```{r}
+tor_smoothing <- select_toroidal_smoothing(
+  theta = tor$theta,
+  phi = tor$phi,
+  kappa_theta_values = c(8, 14),
+  kappa_phi_values = c(8, 14),
+  n_folds = 3,
+  seed = 6
+)
+
+head(tor_smoothing)
+```
+
+The support diagnostic should be inspected before overinterpreting conditional
+features in sparsely sampled angular regions.
+
+If `R(theta)` is the kernel support relative to the best-supported direction,
+the local standard error is approximately inflated by `1 / sqrt(R(theta))`
+when other ingredients are fixed. Thus a threshold of 0.25 flags regions with
+about twice the best-supported standard error, while the default 0.15 permits
+an inflation of about 2.58. Use 0.15 for an exploratory display and 0.25 for a
+more conservative reading. If the substantive interpretation changes between
+these thresholds, report the sensitivity rather than selecting one value
+silently.
+
+```{r}
+support <- marginal_support_data(
+  theta = cyl$theta,
+  kappa = cyl_smoothing$kappa[1],
+  relative_threshold = 0.20
+)
+
+head(support)
+plot_marginal_support(
+  theta = cyl$theta,
+  kappa = cyl_smoothing$kappa[1],
+  relative_threshold = 0.20
+)
+```
+
+```{r}
+support_default <- marginal_support_data(
+  theta = cyl$theta,
+  kappa = cyl_smoothing$kappa[1],
+  relative_threshold = 0.15
+)
+support_conservative <- marginal_support_data(
+  theta = cyl$theta,
+  kappa = cyl_smoothing$kappa[1],
+  relative_threshold = 0.25
+)
+
+c(
+  default_fraction_flagged = mean(support_default$low_support),
+  conservative_fraction_flagged = mean(support_conservative$low_support)
+)
+```

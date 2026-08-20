@@ -84,8 +84,8 @@ use.
 # Availability
 
 The development repository is available at
-<https://github.com/AurelienNicosiaULaval/ggcircular>. A Zenodo archive DOI
-should be added after the first stable GitHub release and before journal
-submission.
+<https://github.com/AurelienNicosiaULaval/ggcircular>. Versioned source
+archives and reproducibility supplements are distributed with tagged GitHub
+releases.
 
 # References

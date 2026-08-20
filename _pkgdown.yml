@@ -95,6 +95,63 @@ reference:
   - tidy_circular
   - glance_circular
 
+- title: Conditional displays on cylinders and tori
+  contents:
+  - circular_topography_data
+  - geom_phase_loom
+  - phase_loom_data
+  - plot_circular_topography
+  - plot_circular_topography_3d
+  - plot_phase_loom
+  - stat_circular_topography
+  - estimate_cyl_density
+  - toroidal_topography_data
+  - geom_toroidal_flow
+  - toroidal_flow_data
+  - plot_toroidal_topography
+  - plot_toroidal_topography_3d
+  - plot_toroidal_flow
+  - stat_toroidal_topography
+  - toroidal_ridge_data
+  - plot_toroidal_ridge
+  - stat_toroidal_ridge
+  - estimate_toroidal_density
+
+- title: Directional diagnostics and uncertainty
+  contents:
+  - alignment_index
+  - conditional_variation_index
+  - local_circ_moment
+  - marginal_support_data
+  - plot_marginal_support
+  - sensitivity_bandwidth_grid
+  - select_cyl_smoothing
+  - select_toroidal_smoothing
+  - bootstrap_stat_orbit
+  - bootstrap_toroidal_ridge
+  - stat_orbit_data
+  - plot_stat_orbit
+  - stat_statistical_orbit
+  - stat_statistical_orbit_ribbon
+  - diagnostic_atlas_data
+  - diagnostic_scenarios
+  - plot_diagnostic_atlas
+  - plot_classical_comparison
+
+- title: Directional simulation helpers
+  contents:
+  - simulate_cyl_diagnostic
+  - simulate_cylindrical
+  - simulate_independence_lineup
+  - simulate_tor_diagnostic
+  - simulate_toroidal
+
+- title: Directional autoplot methods
+  contents:
+  - autoplot.bootstrap_stat_orbit
+  - autoplot.bootstrap_toroidal_ridge
+  - autoplot.diagnostic_atlas_data
+
 - title: Spherical and posterior helpers
   contents:
   - spherical_to_cartesian
@@ -136,3 +193,9 @@ articles:
   - validation
   - validation-comparative
   - article-demonstration
+
+- title: Cylindrical and toroidal workflows
+  contents:
+  - circular-linear-workflow
+  - circular-circular-workflow
+  - smoothing-support-diagnostics

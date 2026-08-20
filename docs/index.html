@@ -5,20 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>A ggplot2 Extension for Circular and Directional Data • ggcircular</title>
+<title>A ggplot2 Extension for Circular, Cylindrical and Toroidal Data • ggcircular</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
-<meta property="og:title" content="A ggplot2 Extension for Circular and Directional Data">
-<meta name="description" content="Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions and movement data visualizations.">
-<meta property="og:description" content="Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions and movement data visualizations.">
+<meta property="og:title" content="A ggplot2 Extension for Circular, Cylindrical and Toroidal Data">
+<meta name="description" content="Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions, movement data visualizations, and displays for circular-linear and circular-circular dependence on cylinders and tori.">
+<meta property="og:description" content="Provides a ggplot2 grammar for circular, axial and directional data, including rose diagrams, circular densities, mean directions, confidence arcs, theoretical circular distributions, movement data visualizations, and displays for circular-linear and circular-circular dependence on cylinders and tori.">
 <meta property="og:image" content="https://aureliennicosiaulaval.github.io/ggcircular/logo.svg">
 </head>
 <body>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggcircular</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,16 +62,16 @@
 </h1>
 </div>
 <p><a href="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/AurelienNicosiaULaval/ggcircular/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a> <a href="https://CRAN.R-project.org/package=ggcircular" class="external-link"><img src="https://www.r-pkg.org/badges/version/ggcircular" alt="CRAN status"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/AurelienNicosiaULaval/ggcircular/releases" class="external-link"><img src="https://img.shields.io/github/v/release/AurelienNicosiaULaval/ggcircular?label=release" alt="GitHub release"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a> <a href="DESCRIPTION"><img src="https://img.shields.io/badge/R-%3E%3D%204.1.0-276DC3.svg" alt="R &gt;= 4.1.0"></a> <a href="https://aureliennicosiaulaval.github.io/ggcircular/"><img src="https://img.shields.io/badge/docs-pkgdown-1f425f.svg" alt="pkgdown site"></a></p>
-<p><code>ggcircular</code> is a <code>ggplot2</code> extension for circular, axial and directional data. It provides layers, scales, coordinate helpers, summaries and diagnostics for angles measured on a periodic scale.</p>
-<p>The package is designed for exploratory graphics, teaching examples and reproducible statistical workflows involving directions, bearings, orientations, times of day, turn angles and other circular measurements.</p>
+<p><code>ggcircular</code> is a <code>ggplot2</code> extension for circular, axial and directional data. It provides layers, scales, coordinate helpers, summaries, diagnostics and displays for circular-linear and circular-circular dependence.</p>
+<p>The package is designed for exploratory graphics, teaching examples and reproducible statistical workflows involving directions, bearings, orientations, times of day, turn angles, circular-linear relationships and other periodic measurements.</p>
 <div class="section level2">
 <h2 id="part-of-the-research-ecosystem">Part of the research ecosystem<a class="anchor" aria-label="anchor" href="#part-of-the-research-ecosystem"></a>
 </h2>
 <p>This repository is part of Aurélien Nicosia’s open research and teaching ecosystem in computational statistics, scientific R software, reproducible data science and statistical education.</p>
 <ul>
-<li>Research Lab: <a href="https://aureliennicosiaulaval.github.io/web_site/research-lab.html" class="external-link">https://aureliennicosiaulaval.github.io/web_site/research-lab.html</a>
+<li>Research Lab: <a href="https://aureliennicosiaulaval.github.io/web_site/research-lab.html" class="external-link uri">https://aureliennicosiaulaval.github.io/web_site/research-lab.html</a>
 </li>
-<li>GitHub profile: <a href="https://github.com/AurelienNicosiaULaval" class="external-link">https://github.com/AurelienNicosiaULaval</a>
+<li>GitHub profile: <a href="https://github.com/AurelienNicosiaULaval" class="external-link uri">https://github.com/AurelienNicosiaULaval</a>
 </li>
 <li>Related projects: <a href="https://github.com/AurelienNicosiaULaval/CircularRegression" class="external-link"><code>CircularRegression</code></a>, <a href="https://github.com/AurelienNicosiaULaval/donnees-bleues" class="external-link"><code>donnees-bleues</code></a>
 </li>
@@ -83,17 +83,17 @@
 <div class="section level3">
 <h3 id="cran">CRAN<a class="anchor" aria-label="anchor" href="#cran"></a>
 </h3>
-<p>Install the released version from CRAN:</p>
+<p>Install the CRAN version (currently 0.1.0):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggcircular"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+<h3 id="github-release-020">GitHub release 0.2.0<a class="anchor" aria-label="anchor" href="#github-release-020"></a>
 </h3>
-<p>Install the development version from GitHub:</p>
+<p>Install version 0.2.0 from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"AurelienNicosiaULaval/ggcircular"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"AurelienNicosiaULaval/ggcircular@v0.2.0"</span><span class="op">)</span></span></code></pre></div>
 <p>Or clone with SSH and install locally:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:AurelienNicosiaULaval/ggcircular.git</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="bu">cd</span> ggcircular</span>
@@ -191,6 +191,12 @@
 <code><a href="reference/spherical_summary.html">spherical_summary()</a></code>, <code><a href="reference/as_circular_draws.html">as_circular_draws()</a></code>, <code><a href="reference/summarise_circular_draws.html">summarise_circular_draws()</a></code>
 </td>
 </tr>
+<tr>
+<td>Directional dependence on cylinders and tori</td>
+<td>
+<code><a href="reference/stat_circular_topography.html">stat_circular_topography()</a></code>, <code><a href="reference/geom_phase_loom.html">geom_phase_loom()</a></code>, <code><a href="reference/stat_toroidal_topography.html">stat_toroidal_topography()</a></code>, <code><a href="reference/stat_toroidal_ridge.html">stat_toroidal_ridge()</a></code>
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -214,10 +220,69 @@
 <p>Axial data, such as unoriented lines, are different again: <code>0</code> and <code>pi</code> represent the same orientation. Use <code>axial = TRUE</code> in summaries and layers for these data.</p>
 </div>
 <div class="section level2">
+<h2 id="conditional-displays-on-cylinders-and-tori">Conditional Displays on Cylinders and Tori<a class="anchor" aria-label="anchor" href="#conditional-displays-on-cylinders-and-tori"></a>
+</h2>
+<p>All computational angles are in radians. The examples below use the mathematical convention, with zero at east and angles increasing counterclockwise. Smoothing controls the resolution of the conditional estimate: larger von Mises concentration values use more local angular neighbourhoods.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_cyl_diagnostic.html">simulate_cyl_diagnostic</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">180</span>, scenario <span class="op">=</span> <span class="st">"multimodal"</span>, seed <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
+<span><span class="va">tor</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_tor_diagnostic.html">simulate_tor_diagnostic</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, scenario <span class="op">=</span> <span class="st">"diagonal"</span>, seed <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    theta_signed <span class="op">=</span> <span class="fu"><a href="reference/angular_difference.html">angular_difference</a></span><span class="op">(</span><span class="va">theta</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    phi_signed <span class="op">=</span> <span class="fu"><a href="reference/angular_difference.html">angular_difference</a></span><span class="op">(</span><span class="va">phi</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><code><a href="reference/stat_circular_topography.html">stat_circular_topography()</a></code> estimates the conditional density of a real response given an angle. <code><a href="reference/geom_phase_loom.html">geom_phase_loom()</a></code> instead displays binned conditional masses.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cyl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/stat_circular_topography.html">stat_circular_topography</a></span><span class="op">(</span>n_theta <span class="op">=</span> <span class="fl">48</span>, n_x <span class="op">=</span> <span class="fl">48</span>, kappa <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/scale_x_circular_radians.html">scale_x_circular_radians</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-circular-topography-layer-1.png" alt="" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">cyl</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">theta</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_phase_loom.html">geom_phase_loom</a></span><span class="op">(</span></span>
+<span>    n_sectors <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>    n_x_bins <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    mass_type <span class="op">=</span> <span class="st">"conditional"</span>,</span>
+<span>    min_mass <span class="op">=</span> <span class="fl">0</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-phase-loom-layer-1.png" alt="" width="100%"></p>
+<p><code><a href="reference/stat_toroidal_topography.html">stat_toroidal_topography()</a></code> estimates <code>f(phi | theta)</code>, while <code><a href="reference/stat_toroidal_ridge.html">stat_toroidal_ridge()</a></code> extracts its first grid maximum and reports local concentration. The ridge also computes <code>after_stat(ridge_ambiguous)</code> from near-tied distinct local modes. A ridge is not a substitute for the full topography when multimodality is plausible.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tor</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">theta_signed</span>, <span class="va">phi_signed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/stat_toroidal_topography.html">stat_toroidal_topography</a></span><span class="op">(</span></span>
+<span>    n_theta <span class="op">=</span> <span class="fl">48</span>,</span>
+<span>    n_phi <span class="op">=</span> <span class="fl">48</span>,</span>
+<span>    kappa_theta <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>    kappa_phi <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>    conditional <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-toroidal-topography-layer-1.png" alt="" width="100%"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tor</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">theta_signed</span>, <span class="va">phi_signed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/stat_toroidal_topography.html">stat_toroidal_topography</a></span><span class="op">(</span></span>
+<span>    n_theta <span class="op">=</span> <span class="fl">48</span>,</span>
+<span>    n_phi <span class="op">=</span> <span class="fl">48</span>,</span>
+<span>    conditional <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.65</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/stat_toroidal_ridge.html">stat_toroidal_ridge</a></span><span class="op">(</span></span>
+<span>    n_theta <span class="op">=</span> <span class="fl">48</span>,</span>
+<span>    n_phi <span class="op">=</span> <span class="fl">48</span>,</span>
+<span>    tie_tolerance <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_equal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-toroidal-ridge-layer-1.png" alt="" width="100%"></p>
+</div>
+<div class="section level2">
 <h2 id="summaries">Summaries<a class="anchor" aria-label="anchor" href="#summaries"></a>
 </h2>
 <p><code><a href="reference/circular_summary.html">circular_summary()</a></code> respects existing <code>dplyr</code> groups and returns mean direction, resultant length, circular variance, circular standard deviation and an estimated von Mises concentration parameter. <code><a href="reference/estimate_kappa.html">estimate_kappa()</a></code> is a descriptive piecewise approximation from the sample resultant length, not a full inferential fit.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wind_directions</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/circular_summary.html">circular_summary</a></span><span class="op">(</span><span class="va">direction</span>, <span class="va">season</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -229,7 +294,7 @@
 <span><span class="co">#&gt; # A tibble: 4 × 5</span></span>
 <span><span class="co">#&gt;   season     n mean_degrees  Rbar kappa</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 fall     131        310.  0.811  3</span></span>
+<span><span class="co">#&gt; 1 fall     131        310.  0.811  3   </span></span>
 <span><span class="co">#&gt; 2 spring   115        135.  0.802  2.89</span></span>
 <span><span class="co">#&gt; 3 summer   138        223.  0.87   4.15</span></span>
 <span><span class="co">#&gt; 4 winter   116         48.2 0.904  5.52</span></span></code></pre></div>
@@ -238,7 +303,7 @@
 <h2 id="axial-data">Axial Data<a class="anchor" aria-label="anchor" href="#axial-data"></a>
 </h2>
 <p>Axial observations identify opposite directions. For example, an orientation of 0 radians is equivalent to an orientation of pi radians. Use <code>axial = TRUE</code> to compute and display these data modulo pi.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">axial_orientations</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">orientation</span>, fill <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/geom_rose.html">geom_rose</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">18</span>, axial <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.72</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/geom_mean_direction.html">geom_mean_direction</a></span><span class="op">(</span>axial <span class="op">=</span> <span class="cn">TRUE</span>, colour <span class="op">=</span> <span class="st">"#123C4A"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -252,7 +317,7 @@
 <h2 id="directional-movement">Directional Movement<a class="anchor" aria-label="anchor" href="#directional-movement"></a>
 </h2>
 <p><code>ggcircular</code> includes helpers for bearings, turn angles and state-specific angular distributions.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">animal_steps</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">turn_angle</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">turn_angle</span>, fill <span class="op">=</span> <span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -271,7 +336,7 @@
 <h2 id="mixtures-of-von-mises-distributions">Mixtures of von Mises Distributions<a class="anchor" aria-label="anchor" href="#mixtures-of-von-mises-distributions"></a>
 </h2>
 <p>Finite mixtures are fitted with an expectation-maximization routine and can be drawn directly on top of empirical rose diagrams. These fits are descriptive and depend on initialization, so use <code>seed</code>, <code>nstart</code> and diagnostic output when the mixture is substantively important.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit_mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_vonmises_mixture.html">fit_vonmises_mixture</a></span><span class="op">(</span></span>
@@ -289,7 +354,7 @@
 <span>  <span class="fu"><a href="reference/coord_circular.html">coord_circular</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/theme_circular.html">theme_circular</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-mixture-1.png" alt="" width="100%"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/augment_circular.html">tidy_circular</a></span><span class="op">(</span><span class="va">fit_mix</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    mu_degrees <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="reference/rad_to_deg.html">rad_to_deg</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -306,7 +371,7 @@
 <div class="section level2">
 <h2 id="tests-and-intervals">Tests and Intervals<a class="anchor" aria-label="anchor" href="#tests-and-intervals"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/circular_mean_ci.html">circular_mean_ci</a></span><span class="op">(</span></span>
 <span>  <span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
@@ -318,7 +383,7 @@
 <span><span class="co">#&gt;    mean lower upper level method        n   Rbar</span></span>
 <span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt; 1  235.  139.  354.  0.95 bootstrap   500 0.0494</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rayleigh</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rayleigh_test.html">rayleigh_test</a></span><span class="op">(</span><span class="va">wind_directions</span><span class="op">$</span><span class="va">direction</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
@@ -328,16 +393,16 @@
 <span>  method <span class="op">=</span> <span class="va">rayleigh</span><span class="op">$</span><span class="va">method</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 4</span></span>
-<span><span class="co">#&gt;   statistic     n p_value method</span></span>
-<span><span class="co">#&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt;   statistic     n p_value method                              </span></span>
+<span><span class="co">#&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                               </span></span>
 <span><span class="co">#&gt; 1      1.22   500   0.295 Rayleigh test of circular uniformity</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="optional-model-integrations">Optional Model Integrations<a class="anchor" aria-label="anchor" href="#optional-model-integrations"></a>
 </h2>
 <p>The package keeps heavier modeling ecosystems in <code>Suggests</code>. When available, these integrations add diagnostics without making them hard dependencies.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">CircularRegression</span><span class="fu">::</span><span class="fu">consensus</span><span class="op">(</span><span class="va">direction</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">wind_directions</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">CircularRegression</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CircularRegression/man/consensus.html" class="external-link">consensus</a></span><span class="op">(</span><span class="va">direction</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">wind_directions</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/circular_model_diagnostics.html">circular_model_diagnostics</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span></span>
@@ -404,7 +469,7 @@
 <h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
 </h2>
 <p>Start with:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"ggcircular"</span>, package <span class="op">=</span> <span class="st">"ggcircular"</span><span class="op">)</span></span></code></pre></div>
 <p>Then see the pkgdown articles:</p>
 <ul>
@@ -417,6 +482,9 @@
 <li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-distributions.html">Circular distributions</a></li>
 <li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/model-diagnostics.html">Model diagnostics</a></li>
 <li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/spherical-and-posterior.html">Spherical and posterior helpers</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-linear-workflow.html">Circular-linear conditional displays</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-circular-workflow.html">Circular-circular conditional displays</a></li>
+<li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/smoothing-support-diagnostics.html">Smoothing and support diagnostics</a></li>
 <li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/validation.html">Scientific validation notes</a></li>
 <li><a href="https://aureliennicosiaulaval.github.io/ggcircular/articles/validation-comparative.html">Comparative validation</a></li>
 </ul>
@@ -425,7 +493,7 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>To cite <code>ggcircular</code> from R, use:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"ggcircular"</span><span class="op">)</span></span></code></pre></div>
 <p>Citation metadata is also provided in <code>inst/CITATION</code>.</p>
 </div>
@@ -440,7 +508,7 @@
 <p><code>ggcircular</code> is currently experimental. The public API is usable, tested and documented, but may still evolve as more angular model classes and validation cases are added.</p>
 <p>Current checks:</p>
 <ul>
-<li>Local <code>devtools::test()</code> passes.</li>
+<li>Local <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code> passes.</li>
 <li>Local <code>devtools::check(document = FALSE, args = "--as-cran", build_args = "--no-manual")</code> is used before release commits.</li>
 <li>GitHub Actions runs hard-dependency checks with <code>_R_CHECK_FORCE_SUGGESTS_=false</code> and full-suggests checks when optional packages are available.</li>
 <li>GitHub Actions includes Linux R-devel plus Linux, macOS and Windows R-release.</li>
@@ -512,7 +580,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>

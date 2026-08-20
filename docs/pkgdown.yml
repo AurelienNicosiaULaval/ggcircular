@@ -1,20 +1,23 @@
-pandoc: 3.8.3
-pkgdown: 2.2.0
+pandoc: '3.9'
+pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   article-demonstration: article-demonstration.html
   axial-data: axial-data.html
+  circular-circular-workflow: circular-circular-workflow.html
   circular-density: circular-density.html
   circular-distributions: circular-distributions.html
+  circular-linear-workflow: circular-linear-workflow.html
   ggcircular: ggcircular.html
   mean-direction-and-uncertainty: mean-direction-and-uncertainty.html
   model-diagnostics: model-diagnostics.html
   movement-data: movement-data.html
   rose-diagrams: rose-diagrams.html
+  smoothing-support-diagnostics: smoothing-support-diagnostics.html
   spherical-and-posterior: spherical-and-posterior.html
   validation-comparative: validation-comparative.html
   validation: validation.html
-last_built: 2026-07-08T00:00Z
+last_built: 2026-08-20T17:04Z
 urls:
   reference: https://aureliennicosiaulaval.github.io/ggcircular/reference
   article: https://aureliennicosiaulaval.github.io/ggcircular/articles

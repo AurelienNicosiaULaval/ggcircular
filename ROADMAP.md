@@ -1,6 +1,6 @@
-# TODO
+# Roadmap
 
-Implemented in the current development version:
+Implemented in version 0.2.0:
 
 1. Optional integration with the `CircularRegression` package.
 2. `autoplot()` methods for angular models.
