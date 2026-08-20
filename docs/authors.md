@@ -9,16 +9,16 @@
 Source:
 [`inst/CITATION`](https://github.com/AurelienNicosiaULaval/ggcircular/blob/main/inst/CITATION)
 
-Nicosia A (2026). *ggcircular: A ggplot2 Extension for Circular and
-Directional Data*. R package version 0.1.0,
-<https://github.com/AurelienNicosiaULaval/ggcircular>.
+Nicosia A (2026). *ggcircular: A ggplot2 Extension for Circular,
+Cylindrical and Toroidal Data*. R package version 0.2.0,
+<https://github.com/AurelienNicosiaULaval/ggcircular/releases/tag/v0.2.0>.
 
     @Manual{,
-      title = {ggcircular: A ggplot2 Extension for Circular and Directional Data},
-      author = {Aurelien Nicosia},
+      title = {ggcircular: A ggplot2 Extension for Circular, Cylindrical and Toroidal Data},
+      author = {Aurélien Nicosia},
       year = {2026},
-      note = {R package version 0.1.0},
-      url = {https://github.com/AurelienNicosiaULaval/ggcircular},
+      note = {R package version 0.2.0},
+      url = {https://github.com/AurelienNicosiaULaval/ggcircular/releases/tag/v0.2.0},
     }
 
 Fisher N (1993). *Statistical Analysis of Circular Data*. Cambridge

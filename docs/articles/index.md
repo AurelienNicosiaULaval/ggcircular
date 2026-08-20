@@ -32,3 +32,12 @@
   notes](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation-comparative.md):
 - [Visualizing Circular and Directional Data with
   ggcircular](https://aureliennicosiaulaval.github.io/ggcircular/articles/article-demonstration.md):
+
+### Cylindrical and toroidal workflows
+
+- [Circular-linear
+  workflow](https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-linear-workflow.md):
+- [Circular-circular
+  workflow](https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-circular-workflow.md):
+- [Smoothing and support
+  diagnostics](https://aureliennicosiaulaval.github.io/ggcircular/articles/smoothing-support-diagnostics.md):

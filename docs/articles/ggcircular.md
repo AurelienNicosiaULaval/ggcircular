@@ -8,11 +8,11 @@ conventions, rose diagrams, circular densities, mean directions,
 uncertainty, axial data, movement data, mixtures of von Mises
 distributions and model diagnostics.
 
-## Not on CRAN yet
+## Installation
 
-`ggcircular` is not on CRAN yet. The package is being stabilized for a
-first CRAN submission; install the development version from GitHub for
-now.
+CRAN currently provides version 0.1.0. Install version 0.2.0 from its
+tagged GitHub release with
+`remotes::install_github("AurelienNicosiaULaval/ggcircular@v0.2.0")`.
 
 ``` r
 

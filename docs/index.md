@@ -19,11 +19,13 @@ site](https://img.shields.io/badge/docs-pkgdown-1f425f.svg)](https://aureliennic
 
 `ggcircular` is a `ggplot2` extension for circular, axial and
 directional data. It provides layers, scales, coordinate helpers,
-summaries and diagnostics for angles measured on a periodic scale.
+summaries, diagnostics and displays for circular-linear and
+circular-circular dependence.
 
 The package is designed for exploratory graphics, teaching examples and
 reproducible statistical workflows involving directions, bearings,
-orientations, times of day, turn angles and other circular measurements.
+orientations, times of day, turn angles, circular-linear relationships
+and other periodic measurements.
 
 ## Part of the research ecosystem
 
@@ -42,21 +44,21 @@ reproducible data science and statistical education.
 
 ### CRAN
 
-Install the released version from CRAN:
+Install the CRAN version (currently 0.1.0):
 
 ``` r
 
 install.packages("ggcircular")
 ```
 
-### Development version
+### GitHub release 0.2.0
 
-Install the development version from GitHub:
+Install version 0.2.0 from GitHub:
 
 ``` r
 
 install.packages("remotes")
-remotes::install_github("AurelienNicosiaULaval/ggcircular")
+remotes::install_github("AurelienNicosiaULaval/ggcircular@v0.2.0")
 ```
 
 Or clone with SSH and install locally:
@@ -106,6 +108,7 @@ wind_directions |>
 | Movement and state-angle graphics | [`mutate_directional_features()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/mutate_directional_features.md), [`geom_direction_arrow()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/geom_direction_arrow.md), [`plot_state_angles()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_state_angles.md) |
 | Angular model diagnostics | [`circular_residuals()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/circular_residuals.md), [`circular_model_diagnostics()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/circular_model_diagnostics.md), [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html) methods |
 | Spherical and posterior helpers | [`spherical_summary()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/spherical_summary.md), [`as_circular_draws()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/as_circular_draws.md), [`summarise_circular_draws()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/summarise_circular_draws.md) |
+| Directional dependence on cylinders and tori | [`stat_circular_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_circular_topography.md), [`geom_phase_loom()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/geom_phase_loom.md), [`stat_toroidal_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_toroidal_topography.md), [`stat_toroidal_ridge()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_toroidal_ridge.md) |
 
 ## Design Principles
 
@@ -133,6 +136,98 @@ for bearing-like data such as wind direction or movement headings.
 Axial data, such as unoriented lines, are different again: `0` and `pi`
 represent the same orientation. Use `axial = TRUE` in summaries and
 layers for these data.
+
+## Conditional Displays on Cylinders and Tori
+
+All computational angles are in radians. The examples below use the
+mathematical convention, with zero at east and angles increasing
+counterclockwise. Smoothing controls the resolution of the conditional
+estimate: larger von Mises concentration values use more local angular
+neighbourhoods.
+
+``` r
+
+cyl <- simulate_cyl_diagnostic(n = 180, scenario = "multimodal", seed = 11)
+tor <- simulate_tor_diagnostic(n = 200, scenario = "diagonal", seed = 12) |>
+  mutate(
+    theta_signed = angular_difference(theta, 0),
+    phi_signed = angular_difference(phi, 0)
+  )
+```
+
+[`stat_circular_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_circular_topography.md)
+estimates the conditional density of a real response given an angle.
+[`geom_phase_loom()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/geom_phase_loom.md)
+instead displays binned conditional masses.
+
+``` r
+
+ggplot(cyl, aes(theta, x)) +
+  stat_circular_topography(n_theta = 48, n_x = 48, kappa = 14) +
+  coord_circular() +
+  scale_x_circular_radians() +
+  theme_circular()
+```
+
+![](reference/figures/README-circular-topography-layer-1.png)
+
+``` r
+
+ggplot(cyl, aes(theta, x)) +
+  geom_phase_loom(
+    n_sectors = 18,
+    n_x_bins = 10,
+    mass_type = "conditional",
+    min_mass = 0
+  ) +
+  coord_equal() +
+  theme_void()
+```
+
+![](reference/figures/README-phase-loom-layer-1.png)
+
+[`stat_toroidal_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_toroidal_topography.md)
+estimates `f(phi | theta)`, while
+[`stat_toroidal_ridge()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_toroidal_ridge.md)
+extracts its first grid maximum and reports local concentration. The
+ridge also computes `after_stat(ridge_ambiguous)` from near-tied
+distinct local modes. A ridge is not a substitute for the full
+topography when multimodality is plausible.
+
+``` r
+
+ggplot(tor, aes(theta_signed, phi_signed)) +
+  stat_toroidal_topography(
+    n_theta = 48,
+    n_phi = 48,
+    kappa_theta = 14,
+    kappa_phi = 14,
+    conditional = TRUE
+  ) +
+  coord_equal()
+```
+
+![](reference/figures/README-toroidal-topography-layer-1.png)
+
+``` r
+
+ggplot(tor, aes(theta_signed, phi_signed)) +
+  stat_toroidal_topography(
+    n_theta = 48,
+    n_phi = 48,
+    conditional = TRUE,
+    alpha = 0.65
+  ) +
+  stat_toroidal_ridge(
+    n_theta = 48,
+    n_phi = 48,
+    tie_tolerance = 0.01,
+    linewidth = 1
+  ) +
+  coord_equal()
+```
+
+![](reference/figures/README-toroidal-ridge-layer-1.png)
 
 ## Summaries
 
@@ -387,6 +482,12 @@ Then see the pkgdown articles:
   diagnostics](https://aureliennicosiaulaval.github.io/ggcircular/articles/model-diagnostics.html)
 - [Spherical and posterior
   helpers](https://aureliennicosiaulaval.github.io/ggcircular/articles/spherical-and-posterior.html)
+- [Circular-linear conditional
+  displays](https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-linear-workflow.html)
+- [Circular-circular conditional
+  displays](https://aureliennicosiaulaval.github.io/ggcircular/articles/circular-circular-workflow.html)
+- [Smoothing and support
+  diagnostics](https://aureliennicosiaulaval.github.io/ggcircular/articles/smoothing-support-diagnostics.html)
 - [Scientific validation
   notes](https://aureliennicosiaulaval.github.io/ggcircular/articles/validation.html)
 - [Comparative

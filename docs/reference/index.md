@@ -140,6 +140,108 @@
   [`glance_circular()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/augment_circular.md)
   : Circular model helper generics
 
+## Conditional displays on cylinders and tori
+
+- [`circular_topography_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/circular_topography_data.md)
+  : Compute circular topography data
+- [`geom_phase_loom()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/geom_phase_loom.md)
+  : Add a phase loom layer
+- [`phase_loom_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/phase_loom_data.md)
+  : Compute phase loom data
+- [`plot_circular_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_circular_topography.md)
+  : Plot circular topography
+- [`plot_circular_topography_3d()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_circular_topography_3d.md)
+  : Experimental 3D circular topography
+- [`plot_phase_loom()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_phase_loom.md)
+  : Plot a phase loom
+- [`stat_circular_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_circular_topography.md)
+  : Add a circular topography stat layer
+- [`estimate_cyl_density()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/estimate_cyl_density.md)
+  : Estimate a density on the cylinder
+- [`toroidal_topography_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/toroidal_topography_data.md)
+  : Compute toroidal topography data
+- [`geom_toroidal_flow()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/geom_toroidal_flow.md)
+  : Add a toroidal flow layer
+- [`toroidal_flow_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/toroidal_flow_data.md)
+  : Compute toroidal flow data
+- [`plot_toroidal_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_toroidal_topography.md)
+  : Plot toroidal topography
+- [`plot_toroidal_topography_3d()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_toroidal_topography_3d.md)
+  : Experimental 3D toroidal topography
+- [`plot_toroidal_flow()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_toroidal_flow.md)
+  : Plot toroidal flow
+- [`stat_toroidal_topography()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_toroidal_topography.md)
+  : Add a toroidal topography stat layer
+- [`toroidal_ridge_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/toroidal_ridge_data.md)
+  : Compute a conditional toroidal ridge
+- [`plot_toroidal_ridge()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_toroidal_ridge.md)
+  : Plot a conditional toroidal ridge
+- [`stat_toroidal_ridge()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_toroidal_ridge.md)
+  : Add a conditional ridge stat layer on the torus
+- [`estimate_toroidal_density()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/estimate_toroidal_density.md)
+  : Estimate a density on the torus
+
+## Directional diagnostics and uncertainty
+
+- [`alignment_index()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/alignment_index.md)
+  : Alignment index for two angular variables
+- [`conditional_variation_index()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/conditional_variation_index.md)
+  : Conditional variation index
+- [`local_circ_moment()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/local_circ_moment.md)
+  : Local circular moment
+- [`marginal_support_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/marginal_support_data.md)
+  : Estimate angular marginal support
+- [`plot_marginal_support()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_marginal_support.md)
+  : Plot angular marginal support
+- [`sensitivity_bandwidth_grid()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/sensitivity_bandwidth_grid.md)
+  : Evaluate sensitivity to smoothing concentration
+- [`select_cyl_smoothing()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/select_cyl_smoothing.md)
+  : Select smoothing parameters for circular-linear conditional density
+- [`select_toroidal_smoothing()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/select_toroidal_smoothing.md)
+  : Select smoothing parameters for toroidal conditional density
+- [`bootstrap_stat_orbit()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/bootstrap_stat_orbit.md)
+  : Bootstrap a statistical orbit
+- [`bootstrap_toroidal_ridge()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/bootstrap_toroidal_ridge.md)
+  : Bootstrap a toroidal conditional ridge
+- [`stat_orbit_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_orbit_data.md)
+  : Compute statistical orbit data
+- [`plot_stat_orbit()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_stat_orbit.md)
+  : Plot a statistical orbit
+- [`stat_statistical_orbit()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_statistical_orbit.md)
+  : Add a statistical orbit line
+- [`stat_statistical_orbit_ribbon()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/stat_statistical_orbit_ribbon.md)
+  : Add a statistical orbit ribbon
+- [`diagnostic_atlas_data()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/diagnostic_atlas_data.md)
+  : Build diagnostic atlas data
+- [`diagnostic_scenarios()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/diagnostic_scenarios.md)
+  : List built-in directional diagnostic scenarios
+- [`plot_diagnostic_atlas()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_diagnostic_atlas.md)
+  : Plot a diagnostic atlas
+- [`plot_classical_comparison()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/plot_classical_comparison.md)
+  : Plot a classical unfolded comparison
+
+## Directional simulation helpers
+
+- [`simulate_cyl_diagnostic()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/simulate_cyl_diagnostic.md)
+  : Simulate diagnostic circular-linear data
+- [`simulate_cylindrical()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/simulate_cylindrical.md)
+  : Simulate circular-linear data
+- [`simulate_independence_lineup()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/simulate_independence_lineup.md)
+  : Simulate a visual-inference lineup under independence
+- [`simulate_tor_diagnostic()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/simulate_tor_diagnostic.md)
+  : Simulate diagnostic circular-circular data
+- [`simulate_toroidal()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/simulate_toroidal.md)
+  : Simulate circular-circular data
+
+## Directional autoplot methods
+
+- [`autoplot(`*`<bootstrap_stat_orbit>`*`)`](https://aureliennicosiaulaval.github.io/ggcircular/reference/autoplot.bootstrap_stat_orbit.md)
+  : Plot bootstrap uncertainty for a statistical orbit
+- [`autoplot(`*`<bootstrap_toroidal_ridge>`*`)`](https://aureliennicosiaulaval.github.io/ggcircular/reference/autoplot.bootstrap_toroidal_ridge.md)
+  : Plot bootstrap uncertainty for a toroidal ridge
+- [`autoplot(`*`<diagnostic_atlas_data>`*`)`](https://aureliennicosiaulaval.github.io/ggcircular/reference/autoplot.diagnostic_atlas_data.md)
+  : Plot diagnostic atlas data
+
 ## Spherical and posterior helpers
 
 - [`spherical_to_cartesian()`](https://aureliennicosiaulaval.github.io/ggcircular/reference/spherical_to_cartesian.md)
